@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://buildings/building.tscn" type="PackedScene" id=1]
+[ext_resource path="res://buildings/meshes/buildings_policestation.mesh" type="ArrayMesh" id=2]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 10, 3, 5 )
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 4.5, 4, 4 )
+
+[node name="PoliceStation" instance=ExtResource( 1 )]
+health = 6
+points = 200
+level = 1
+
+[node name="Mesh" parent="Origin" index="0"]
+mesh = ExtResource( 2 )
+
+[node name="CollisionShape" parent="." index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -5 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 3.5 )
+shape = SubResource( 2 )
+
+[node name="HitboxShape" parent="Hitbox" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -5 )
+shape = SubResource( 1 )
+
+[node name="HitboxShape2" type="CollisionShape" parent="Hitbox" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 3.5 )
+shape = SubResource( 2 )

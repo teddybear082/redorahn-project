@@ -1,0 +1,148 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://interface/interface.gd" type="Script" id=1]
+[ext_resource path="res://interface/hud_theme.tres" type="Theme" id=2]
+[ext_resource path="res://interface/health_theme.tres" type="Theme" id=3]
+[ext_resource path="res://interface/interface_theme.tres" type="Theme" id=4]
+[ext_resource path="res://interface/screenflash.tscn" type="PackedScene" id=5]
+[ext_resource path="res://interface/interface_theme_italic.tres" type="Theme" id=6]
+
+[node name="Interface" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 4 )
+script = ExtResource( 1 )
+
+[node name="HUD" type="Control" parent="."]
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+mouse_filter = 2
+
+[node name="HealthContainer" type="Control" parent="HUD"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="HealthBackground" type="ColorRect" parent="HUD/HealthContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 388.0
+margin_bottom = 20.0
+color = Color( 0.25098, 0, 0, 1 )
+
+[node name="HealthBar" type="ColorRect" parent="HUD/HealthContainer"]
+margin_right = 384.0
+margin_bottom = 16.0
+color = Color( 0.85098, 0, 0, 1 )
+
+[node name="HealthLabel" type="Label" parent="HUD/HealthContainer"]
+margin_top = -1.0
+margin_right = 66.0
+margin_bottom = 19.0
+theme = ExtResource( 3 )
+text = "REDORAHN"
+
+[node name="ScoreCounter" type="Label" parent="HUD"]
+margin_top = 24.0
+margin_right = 384.0
+margin_bottom = 64.0
+theme = ExtResource( 2 )
+text = "SCORE  0"
+align = 2
+
+[node name="ScoreScreen" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Container" type="VBoxContainer" parent="ScoreScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ScoreCounter" type="Label" parent="ScoreScreen/Container"]
+margin_top = 462.0
+margin_right = 1920.0
+margin_bottom = 498.0
+text = "SCORE:0"
+align = 1
+
+[node name="KillCounter" type="Label" parent="ScoreScreen/Container"]
+margin_top = 502.0
+margin_right = 1920.0
+margin_bottom = 538.0
+text = "KILLS:0"
+align = 1
+
+[node name="HighScoreCounter" type="Label" parent="ScoreScreen/Container"]
+margin_top = 542.0
+margin_right = 1920.0
+margin_bottom = 578.0
+text = "HIGHSCORE: 150000"
+align = 1
+
+[node name="NewHighScoreText" type="Label" parent="ScoreScreen/Container"]
+visible = false
+margin_top = 582.0
+margin_right = 1920.0
+margin_bottom = 618.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "NEW HIGH SCORE!"
+align = 1
+
+[node name="KeyText" type="Label" parent="ScoreScreen"]
+anchor_left = 0.5
+anchor_top = 0.75
+anchor_right = 0.5
+anchor_bottom = 0.75
+margin_left = -202.0
+margin_top = -18.0
+margin_right = 202.0
+margin_bottom = 18.0
+theme = ExtResource( 6 )
+text = "Press any key to try again"
+align = 1
+
+[node name="PauseLabel" type="Label" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -72.0
+margin_top = -27.0
+margin_right = 72.0
+margin_bottom = 27.0
+text = "PAUSE"
+align = 1
+valign = 1
+
+[node name="ScreenFlash" parent="." instance=ExtResource( 5 )]
+
+[node name="BlackScreen" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="HealthTimer" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="PressTimer" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="HighScoreTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="RestartTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="timeout" from="HealthTimer" to="." method="switch_health_bar"]
+[connection signal="timeout" from="PressTimer" to="." method="switch_press_text"]
+[connection signal="timeout" from="HighScoreTimer" to="." method="flash_high_score"]
+[connection signal="timeout" from="RestartTimer" to="." method="restart"]

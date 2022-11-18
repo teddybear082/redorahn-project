@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=1]
+
+[sub_resource type="SpatialMaterial" id=12]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="QuadMesh" id=17]
+material = SubResource( 12 )
+
+[sub_resource type="Curve" id=14]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=15]
+offsets = PoolRealArray( 0.497207, 1 )
+colors = PoolColorArray( 0.75, 0, 0, 0.501961, 0.75, 0, 0, 0 )
+
+[sub_resource type="Gradient" id=16]
+colors = PoolColorArray( 0.75, 0.75, 0.75, 1, 1, 1, 1, 1 )
+
+[node name="BloodParticles" type="CPUParticles"]
+emitting = false
+one_shot = true
+explosiveness = 0.5
+lifetime_randomness = 0.5
+local_coords = false
+mesh = SubResource( 17 )
+direction = Vector3( 0, 1, 0 )
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 5.0
+initial_velocity_random = 1.0
+angle = 720.0
+angle_random = 1.0
+scale_amount = 3.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 14 )
+color_ramp = SubResource( 15 )
+color_initial_ramp = SubResource( 16 )

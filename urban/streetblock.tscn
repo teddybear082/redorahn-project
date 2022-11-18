@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://urban/meshes/streets_streetblock.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://urban/streetblock.gd" type="Script" id=2]
+
+[sub_resource type="Curve3D" id=1]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 17, 0, -17, 0, 0, 0, 0, 0, 0, 17, 0, 17, 0, 0, 0, 0, 0, 0, -17, 0, 17, 0, 0, 0, 0, 0, 0, -17, 0, -17, 0, 0, 0, 0, 0, 0, 17, 0, -17 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve3D" id=2]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 14, 0, -14, 0, 0, 0, 0, 0, 0, 14, 0, 14, 0, 0, 0, 0, 0, 0, -14, 0, 14, 0, 0, 0, 0, 0, 0, -14, 0, -14, 0, 0, 0, 0, 0, 0, 14, 0, -14 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[node name="Streetblock" type="MeshInstance"]
+mesh = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="VehiclePath" type="Path" parent="." groups=["vehicle_paths"]]
+curve = SubResource( 1 )
+
+[node name="HumanPath" type="Path" parent="." groups=["human_paths"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+curve = SubResource( 2 )

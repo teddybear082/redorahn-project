@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://effects/fire.gd" type="Script" id=1]
+[ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=2]
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="QuadMesh" id=8]
+material = SubResource( 9 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0.254545 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0.128492, 0.363128, 0.687151, 1 )
+colors = PoolColorArray( 1, 0.75, 0.25, 1, 0.915948, 0.0280172, 0.0280172, 1, 0.25, 0.25, 0.25, 1, 0.25098, 0.25098, 0.25098, 0 )
+
+[node name="FireParticles" type="CPUParticles"]
+amount = 32
+lifetime = 3.0
+local_coords = false
+mesh = SubResource( 8 )
+spread = 180.0
+gravity = Vector3( 2, 10, 0 )
+initial_velocity_random = 1.0
+angle = 720.0
+angle_random = 1.0
+scale_amount = 10.0
+scale_amount_curve = SubResource( 5 )
+color_ramp = SubResource( 4 )
+script = ExtResource( 1 )

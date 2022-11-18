@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/mayhem.ogg-f093b77638e4797743762bb1f157b9b4.oggstr"
+
+[deps]
+
+source_file="res://musics/mayhem.ogg"
+dest_files=[ "res://.import/mayhem.ogg-f093b77638e4797743762bb1f157b9b4.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=66.46

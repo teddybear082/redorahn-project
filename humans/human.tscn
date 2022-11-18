@@ -1,0 +1,151 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://humans/human.gd" type="Script" id=1]
+[ext_resource path="res://humans/meshes/human.glb" type="PackedScene" id=2]
+[ext_resource path="res://humans/meshes/human_accessories_smartphone.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://sounds/splat.wav" type="AudioStream" id=4]
+[ext_resource path="res://sounds/scream_f_a.wav" type="AudioStream" id=5]
+[ext_resource path="res://sounds/fire.wav" type="AudioStream" id=9]
+[ext_resource path="res://humans/meshes/blood.png" type="Texture" id=10]
+[ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=11]
+
+[sub_resource type="SphereShape" id=2]
+radius = 0.5
+
+[sub_resource type="SphereShape" id=3]
+
+[sub_resource type="PlaneMesh" id=4]
+size = Vector2( 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_transparent = true
+flags_unshaded = true
+params_use_alpha_scissor = true
+params_alpha_scissor_threshold = 0.5
+albedo_texture = ExtResource( 10 )
+
+[sub_resource type="SpatialMaterial" id=12]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 11 )
+
+[sub_resource type="QuadMesh" id=8]
+material = SubResource( 12 )
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=10]
+offsets = PoolRealArray( 0.497207, 1 )
+colors = PoolColorArray( 0.75, 0, 0, 0.501961, 0.75, 0, 0, 0 )
+
+[sub_resource type="Gradient" id=11]
+colors = PoolColorArray( 0.75, 0.75, 0.75, 1, 1, 1, 1, 1 )
+
+[node name="Human" type="KinematicBody" groups=["humans"]]
+collision_layer = 256
+collision_mask = 112
+script = ExtResource( 1 )
+
+[node name="Origin" parent="." instance=ExtResource( 2 )]
+
+[node name="Skeleton" parent="Origin/HumanArmature" index="0"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="HandAnchor" type="BoneAttachment" parent="Origin/HumanArmature/Skeleton" index="1"]
+transform = Transform( -0.997817, -0.0660321, -8.90919e-06, 0.0660321, -0.997817, 5.69495e-07, -8.9407e-06, 0, 1, -0.17611, -0.108159, -1.62327e-07 )
+bone_name = "hand_r"
+
+[node name="Accessory" type="MeshInstance" parent="Origin/HumanArmature/Skeleton/HandAnchor"]
+transform = Transform( -1, 8.38227e-08, -1.63177e-12, -1.27567e-13, 2.08616e-07, 1, 8.75443e-08, 1, 1.78814e-07, -0.00288819, 0.0385181, 0.03342 )
+visible = false
+mesh = ExtResource( 3 )
+
+[node name="AnimationPlayer" parent="Origin" index="1"]
+autoplay = "walk-loop"
+
+[node name="FirePosition" type="Position3D" parent="Origin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.389813, -0.356156 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
+
+[node name="Hitbox" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 526
+monitoring = false
+monitorable = false
+
+[node name="HitboxShape" type="CollisionShape" parent="Hitbox"]
+shape = SubResource( 3 )
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="InvTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+autostart = true
+
+[node name="ScareTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ScreamSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 5 )
+unit_db = -5.0
+unit_size = 15.0
+bus = "SFX"
+
+[node name="SplatSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 4 )
+unit_size = 25.0
+bus = "SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 9 )
+unit_db = -10.0
+unit_size = 25.0
+bus = "SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="SplatMesh" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0 )
+visible = false
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="BloodParticles" type="CPUParticles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
+visible = false
+emitting = false
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+lifetime_randomness = 0.5
+local_coords = false
+mesh = SubResource( 8 )
+direction = Vector3( 0, 1, 0 )
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 2.5
+initial_velocity_random = 1.0
+angle = 720.0
+angle_random = 1.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 9 )
+color_ramp = SubResource( 10 )
+color_initial_ramp = SubResource( 11 )
+
+[connection signal="area_entered" from="Hitbox" to="." method="hit"]
+[connection signal="body_entered" from="Hitbox" to="." method="collision"]
+[connection signal="timeout" from="AttackTimer" to="." method="attack"]
+[connection signal="timeout" from="InvTimer" to="." method="make_vulnerable"]
+[connection signal="timeout" from="ScareTimer" to="." method="set_scared"]
+
+[editable path="Origin"]

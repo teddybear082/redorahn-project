@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://vehicles/vehicle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://vehicles/meshes/vehicles_apc.mesh" type="ArrayMesh" id=2]
+[ext_resource path="res://vehicles/meshes/vehicles_apc_turret.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://vehicles/apc.gd" type="Script" id=4]
+[ext_resource path="res://sounds/fire.wav" type="AudioStream" id=5]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.75, 0.775, 1.5 )
+
+[node name="APC" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+points = 50
+occupants = 3
+min_occupants = 1
+level = 2
+can_attack = true
+can_drop = true
+attack_rate = 2.0
+
+[node name="Mesh" parent="Origin" index="0"]
+mesh = ExtResource( 2 )
+
+[node name="TurretMesh" type="MeshInstance" parent="Origin" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0 )
+mesh = ExtResource( 3 )
+
+[node name="FirePosition" type="Position3D" parent="Origin/TurretMesh" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.4 )
+
+[node name="CollisionShape" parent="Hitbox" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0 )
+shape = SubResource( 1 )
+
+[node name="ShootSound" type="AudioStreamPlayer3D" parent="." index="7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0 )
+stream = ExtResource( 5 )
+unit_db = -10.0
+unit_size = 25.0
+bus = "SFX"
+attenuation_filter_cutoff_hz = 20500.0

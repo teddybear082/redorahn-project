@@ -1,0 +1,104 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://buildings/meshes/buildings_building.mesh" type="ArrayMesh" id=1]
+[ext_resource path="res://buildings/meshes/buildings_crumble.mesh" type="ArrayMesh" id=2]
+[ext_resource path="res://buildings/building.gd" type="Script" id=3]
+[ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=5]
+[ext_resource path="res://sounds/building_collapse.wav" type="AudioStream" id=6]
+[ext_resource path="res://sounds/building_down.wav" type="AudioStream" id=7]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 4, 5, 4 )
+
+[sub_resource type="SpatialMaterial" id=8]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 5 )
+
+[sub_resource type="QuadMesh" id=3]
+material = SubResource( 8 )
+
+[sub_resource type="Curve" id=6]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.193069, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0.569832, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0.648045, 1 )
+colors = PoolColorArray( 0.75, 0.75, 0.75, 1, 1, 1, 1, 1 )
+
+[node name="Building" type="StaticBody" groups=["buildings"]]
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 3 )
+health = 4
+
+[node name="Origin" type="Spatial" parent="."]
+
+[node name="Mesh" type="MeshInstance" parent="Origin"]
+mesh = ExtResource( 1 )
+skeleton = NodePath("../..")
+
+[node name="MeshDestroyed" type="MeshInstance" parent="Origin"]
+transform = Transform( 1.25, 0, 0, 0, 0.5, 0, 0, 0, 1.25, 0, 0, 0 )
+visible = false
+mesh = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+shape = SubResource( 1 )
+
+[node name="Hitbox" type="Area" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="HitboxShape" type="CollisionShape" parent="Hitbox"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
+shape = SubResource( 1 )
+
+[node name="HitTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="SmokeParticles" type="CPUParticles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55638, 0 )
+emitting = false
+amount = 32
+lifetime = 0.3
+mesh = SubResource( 3 )
+emission_shape = 2
+emission_box_extents = Vector3( 6, 1, 6 )
+spread = 180.0
+flatness = 1.0
+gravity = Vector3( 0, 50, 0 )
+initial_velocity = 10.0
+scale_amount = 10.0
+scale_amount_random = 1.0
+scale_amount_curve = SubResource( 6 )
+color = Color( 0.501961, 0.501961, 0.501961, 1 )
+color_ramp = SubResource( 5 )
+color_initial_ramp = SubResource( 7 )
+
+[node name="CollapseSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 6 )
+unit_size = 25.0
+bus = "SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="DownSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 7 )
+unit_db = -3.0
+unit_size = 25.0
+bus = "SFX"
+attenuation_filter_cutoff_hz = 20500.0
+
+[connection signal="area_entered" from="Hitbox" to="." method="hit"]
+[connection signal="timeout" from="HitTimer" to="." method="_on_HitTimer_timeout"]

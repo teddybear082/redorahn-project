@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://humans/human.tscn" type="PackedScene" id=1]
+[ext_resource path="res://humans/meshes/human_meshes_cop.mesh" type="ArrayMesh" id=2]
+[ext_resource path="res://humans/meshes/human_accessories_handgun.mesh" type="ArrayMesh" id=3]
+
+[node name="Human" instance=ExtResource( 1 )]
+level = 1
+attack_animation = "handgun"
+
+[node name="Skeleton" parent="Origin/HumanArmature" index="0"]
+bones/22/bound_children = [  ]
+
+[node name="Human" parent="Origin/HumanArmature/Skeleton" index="0"]
+mesh = ExtResource( 2 )
+
+[node name="Accessory" parent="Origin/HumanArmature/Skeleton/HandAnchor" index="0"]
+mesh = ExtResource( 3 )
+
+[editable path="Origin"]
