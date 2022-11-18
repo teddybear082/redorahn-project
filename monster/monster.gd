@@ -41,19 +41,19 @@ func _physics_process(delta):
 	$CameraPivot.rotation_degrees.y -= Input.get_action_strength("camera_right") * camera_speed
 	$CameraPivot.rotation_degrees.y += Input.get_action_strength("camera_left") * camera_speed
 	$CameraPivot.rotation_degrees.x = clamp($CameraPivot.rotation_degrees.x, -75.0, 25.0)
-		
+
 	var target = Vector3.BACK.rotated(Vector3.UP, $CameraPivot.rotation.y) * 3.0
 	target += Vector3.FORWARD.rotated(Vector3.UP, $Origin.rotation.y) * 5.0
-	
+
 	var vel = (target - $CameraPivot.translation) * 0.025
 	$CameraPivot.translation += vel
 	$CameraPivot.translation.y = 2.5
-	
+
 	var time = $ShakeTimer.time_left
 	time = clamp(time, 0.0, 1.0)
 	time *= 0.25
 	$CameraPivot/Camera.translation = Vector3(randf() * time, randf() * time, camera_distance + randf() * time)
-	
+
 	# Monster update
 	var velocity = Vector3.ZERO
 	velocity.y = -10
@@ -147,7 +147,7 @@ func _physics_process(delta):
 		_:
 			if not player.is_playing():
 				set_state(STATE_IDLE)
-	
+
 	move_and_slide(velocity)
 
 
