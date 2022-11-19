@@ -18,6 +18,8 @@ var speed = 20.0
 var camera_distance = 20.0
 var state = STATE_IDLE
 var grabbed_object = null
+var fire = preload("res://effects/fire.tscn")
+var able_to_torch: bool = true
 
 onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
 onready var lstomp_area = $FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea
@@ -32,6 +34,11 @@ onready var left_controller : ARVRController = $FPController/LeftHandController
 onready var right_controller : ARVRController = $FPController/RightHandController
 onready var step_sound = $StepSound
 onready var roar_sound = $DieSound
+onready var fire_sound = $FireSound
+onready var eat_sound = $EatSound
+onready var fire_raycast = $FPController/ARVRCamera/FireRayCast
+onready var torch_timer = $TorchTimer
+
 
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -61,7 +68,18 @@ func _ready():
 #		$CameraPivot.rotation_degrees.x = clamp($CameraPivot.rotation_degrees.x, -75.0, 25.0)
 
 
-#func _physics_process(delta):
+func _physics_process(delta):
+	if fire_raycast.enabled and fire_raycast.is_colliding() and able_to_torch:
+		if fire_raycast.get_collider() is StaticBody or fire_raycast.get_collider() is KinematicBody:
+			var collider = fire_raycast.get_collider()
+			var fire_instance = fire.instance()
+			fire_instance.scale_amount = 3
+			#fire_instance.global_transform.origin = fire_raycast.get_collision_point()
+			collider.add_child(fire_instance)
+			able_to_torch = false
+			torch_timer.start()
+			if collider.is_in_group("humans"):
+				collider.splat()
 #	# Camera update
 #	var camera_speed = 3.0
 #	$CameraPivot.rotation_degrees.x -= Input.get_action_strength("camera_down") * camera_speed
@@ -265,7 +283,8 @@ func hit(area):
 func _on_left_controller_pressed(button):
 	if button == fire_button:
 		$FPController/ARVRCamera/FireParticles.visible = true
-		$FireSound.play()
+		fire_sound.play()
+		fire_raycast.enabled = true
 	
 	if button == attack_button:
 		lattack_area.monitorable = true
@@ -291,9 +310,10 @@ func _on_right_controller_pressed(button):
 			
 func _on_left_controller_released(button):
 	if button == fire_button:
+		fire_raycast.enabled = false
 		$FPController/ARVRCamera/FireParticles.visible = false
-		$FireSound.stop()
-	
+		fire_sound.stop()
+		
 	if button == attack_button:
 		lattack_area.monitorable = false
 		lattack_area.monitoring = false
@@ -315,3 +335,13 @@ func _on_right_controller_released(button):
 
 func _play_step_sound():
 	step_sound.play()
+
+
+func _on_EatingArea_body_entered(body):
+	if body.is_in_group("humans"):
+		eat_sound.play()
+		call_deferred(body.queue_free())
+
+
+func _on_TorchTimer_timeout():
+	able_to_torch = true
