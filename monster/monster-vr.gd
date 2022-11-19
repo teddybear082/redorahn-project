@@ -30,6 +30,8 @@ onready var player_body = $FPController/PlayerBody
 onready var player_model = $FPController/monster
 onready var left_controller : ARVRController = $FPController/LeftHandController
 onready var right_controller : ARVRController = $FPController/RightHandController
+onready var step_sound = $StepSound
+onready var roar_sound = $DieSound
 
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -47,6 +49,9 @@ func _ready():
 	right_controller.connect("button_pressed", self, "_on_right_controller_pressed")
 	left_controller.connect("button_release", self, "_on_left_controller_released")
 	right_controller.connect("button_release", self, "_on_right_controller_released")
+	
+	# Connect procedural step signals
+	player_model.connect("avatar_procedural_step_taken", self, "_play_step_sound")
 	
 #func _unhandled_input(event):
 #	if event is InputEventMouseMotion:
@@ -269,7 +274,7 @@ func _on_left_controller_pressed(button):
 		
 func _on_right_controller_pressed(button):
 	if button == roar_button:
-		$RoarSound.play()
+		roar_sound.play()
 		
 	if button == attack_button:
 		rattack_area.monitorable = true
@@ -298,3 +303,7 @@ func _on_right_controller_released(button):
 	if button == grab_button:
 		grab_area.monitorable = false
 		grab_area.monitoring = false
+
+
+func _play_step_sound():
+	step_sound.play()

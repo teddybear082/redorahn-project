@@ -30,8 +30,8 @@ onready var player = $Origin/AnimationPlayer
 func _ready():
 	if not monster:
 		remove()
-	if monster:
-		monster_fp_controller = monster.get_node("FPController")
+	#if monster:
+		#monster_fp_controller = monster.get_node("FPController")
 	translation.y = 0.7
 	if randi() % 100 < 50:
 		path_direction = -1.0

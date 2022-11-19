@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -26,6 +26,19 @@
 [ext_resource path="res://sounds/monster_roar.wav" type="AudioStream" id=24]
 [ext_resource path="res://addons/godot-xr-tools/player/player_body.tscn" type="PackedScene" id=25]
 [ext_resource path="res://addons/godot-xr-tools/functions/movement_jump.tscn" type="PackedScene" id=26]
+[ext_resource path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" type="Script" id=27]
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 27 )
+flags = 16
+move_drag = 5.0
+move_traction = 30.0
+stop_on_slope = true
+move_max_slope = 45.0
+jump_max_slope = 45.0
+jump_velocity = 20.0
+bounciness = 0.0
+bounce_threshold = 1.0
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "Monster"
@@ -179,11 +192,13 @@ strafe = true
 [node name="RightPhysicsHand" parent="FPController/RightHandController" index="0" instance=ExtResource( 15 )]
 
 [node name="MovementTurn" parent="FPController/RightHandController" index="1" instance=ExtResource( 16 )]
+turn_mode = 2
 
 [node name="MovementJump" parent="FPController/RightHandController" index="2" instance=ExtResource( 26 )]
 jump_button_id = 7
 
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
+physics = SubResource( 9 )
 
 [node name="monster" type="Spatial" parent="FPController"]
 script = ExtResource( 17 )
@@ -201,7 +216,7 @@ ik_raycast_height = 4.0
 avatar_z_offset = 2.0
 use_procedural_walk = true
 step_anim_height = 1.0
-step_distance = 1.0
+step_distance = 0.75
 max_legs_spread = 1.5
 
 [node name="Armature" type="Spatial" parent="FPController/monster"]

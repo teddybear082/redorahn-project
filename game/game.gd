@@ -37,7 +37,7 @@ var game_over = false
 var aliens = false
 
 onready var monster = $Monster
-onready var monster_fp_controller = monster.get_node("FPController")
+onready var monster_fp_controller = monster.get_node("FPController/ARVRCamera")
 
 
 func _ready():
