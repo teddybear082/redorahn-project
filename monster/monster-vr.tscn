@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -27,8 +27,31 @@
 [ext_resource path="res://addons/godot-xr-tools/player/player_body.tscn" type="PackedScene" id=25]
 [ext_resource path="res://addons/godot-xr-tools/functions/movement_jump.tscn" type="PackedScene" id=26]
 [ext_resource path="res://addons/godot-xr-tools/overrides/ground_physics_settings.gd" type="Script" id=27]
+[ext_resource path="res://effects/fire.gd" type="Script" id=28]
+[ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=29]
+[ext_resource path="res://sounds/building_collapse.wav" type="AudioStream" id=30]
 
-[sub_resource type="Resource" id=9]
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 29 )
+
+[sub_resource type="QuadMesh" id=8]
+material = SubResource( 9 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0, 0.254545 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0.128492, 0.363128, 0.687151, 1 )
+colors = PoolColorArray( 1, 0.75, 0.25, 1, 0.915948, 0.0280172, 0.0280172, 1, 0.25, 0.25, 0.25, 1, 0.25098, 0.25098, 0.25098, 0 )
+
+[sub_resource type="Resource" id=10]
 script = ExtResource( 27 )
 flags = 16
 move_drag = 5.0
@@ -36,7 +59,7 @@ move_traction = 30.0
 stop_on_slope = true
 move_max_slope = 45.0
 jump_max_slope = 45.0
-jump_velocity = 20.0
+jump_velocity = 12.0
 bounciness = 0.0
 bounce_threshold = 1.0
 
@@ -157,10 +180,10 @@ bind/30/name = "elbow_r"
 bind/30/bone = -1
 bind/30/pose = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 2.3, -10, 0 )
 
-[sub_resource type="SphereShape" id=4]
+[sub_resource type="SphereShape" id=11]
 radius = 2.0
 
-[sub_resource type="SphereShape" id=5]
+[sub_resource type="SphereShape" id=12]
 radius = 8.0
 
 [sub_resource type="SphereShape" id=6]
@@ -169,7 +192,7 @@ radius = 3.0
 [sub_resource type="SphereShape" id=7]
 radius = 2.0
 
-[sub_resource type="CapsuleShape" id=8]
+[sub_resource type="CapsuleShape" id=13]
 radius = 3.0
 height = 4.0
 
@@ -181,12 +204,28 @@ script = ExtResource( 18 )
 [node name="ARVRCamera" parent="FPController" index="1"]
 far = 1000.0
 
+[node name="FireParticles" type="CPUParticles" parent="FPController/ARVRCamera" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
+visible = false
+amount = 32
+lifetime = 3.0
+mesh = SubResource( 8 )
+spread = 180.0
+gravity = Vector3( 0, -5, -10 )
+initial_velocity_random = 1.0
+angle = 720.0
+angle_random = 1.0
+scale_amount = 3.0
+scale_amount_curve = SubResource( 5 )
+color_ramp = SubResource( 4 )
+script = ExtResource( 28 )
+
 [node name="LeftPhysicsHand" parent="FPController/LeftHandController" index="0" instance=ExtResource( 14 )]
 
 [node name="MovementDirect" parent="FPController/LeftHandController" index="1" instance=ExtResource( 13 )]
 enabled = true
 order = 10
-max_speed = 10.0
+max_speed = 4.0
 strafe = true
 
 [node name="RightPhysicsHand" parent="FPController/RightHandController" index="0" instance=ExtResource( 15 )]
@@ -198,7 +237,7 @@ turn_mode = 2
 jump_button_id = 7
 
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
-physics = SubResource( 9 )
+physics = SubResource( 10 )
 
 [node name="monster" type="Spatial" parent="FPController"]
 script = ExtResource( 17 )
@@ -215,8 +254,10 @@ height_offset = 2.5
 ik_raycast_height = 4.0
 avatar_z_offset = 2.0
 use_procedural_walk = true
-step_anim_height = 1.0
+step_anim_height = 2.0
+step_anim_time = 1.5
 step_distance = 0.75
+strafe_step_modifier = 0.33
 max_legs_spread = 1.5
 
 [node name="Armature" type="Spatial" parent="FPController/monster"]
@@ -393,7 +434,7 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea"]
-shape = SubResource( 4 )
+shape = SubResource( 11 )
 
 [node name="SmashAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea"]
 transform = Transform( 1, 2.98023e-08, 0, -1.49012e-08, 1, -3.35276e-08, 2.98023e-08, -5.58794e-09, 1, -0.545582, 2.87747, -0.650013 )
@@ -404,7 +445,7 @@ monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea/SmashAttackArea"]
 transform = Transform( 1, -9.31323e-10, -1.49012e-08, -1.86265e-09, 1, -1.30385e-08, -1.49012e-08, 9.48785e-09, 1, 1.99354, 0.0234688, 0.15885 )
-shape = SubResource( 5 )
+shape = SubResource( 12 )
 
 [node name="RightHandAnchor" type="BoneAttachment" parent="FPController/monster/Armature/Skeleton"]
 transform = Transform( 0.615399, 0.78501, -0.0710124, 0.00978236, -0.0976926, -0.995169, -0.788155, 0.611731, -0.0678007, -3.34279, -0.99149, 1.59694 )
@@ -417,7 +458,7 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/RAttackArea"]
-shape = SubResource( 4 )
+shape = SubResource( 11 )
 
 [node name="GrabArea" type="Area" parent="FPController/monster/Armature/Skeleton/RightHandAnchor"]
 transform = Transform( 1, 8.9407e-08, 7.45058e-09, 0, 1, -5.58794e-08, -5.58794e-08, -4.09782e-08, 1, 0.316347, 0.840722, -0.324262 )
@@ -472,7 +513,7 @@ collision_mask = 15360
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/Hitbox"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 13 )
 
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.1
@@ -505,6 +546,10 @@ bus = "SFX"
 [node name="SmashSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 19 )
 pitch_scale = 0.7
+bus = "SFX"
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 30 )
 bus = "SFX"
 
 [connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]

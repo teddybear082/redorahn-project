@@ -1,18 +1,23 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://interface/menu.gd" type="Script" id=1]
-[ext_resource path="res://interface/interface_theme.tres" type="Theme" id=2]
-[ext_resource path="res://interface/fonts/DejaVuSansMono-Bold.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://effects/textures/smoke.png" type="Texture" id=4]
-[ext_resource path="res://interface/logo_texture.png" type="Texture" id=5]
-[ext_resource path="res://sounds/curious_jingle.wav" type="AudioStream" id=6]
-[ext_resource path="res://interface/screenflash.tscn" type="PackedScene" id=7]
 [ext_resource path="res://sounds/monster_smash.wav" type="AudioStream" id=8]
-[ext_resource path="res://interface/interface_theme_italic.tres" type="Theme" id=9]
-[ext_resource path="res://musics/title.ogg" type="AudioStream" id=10]
 [ext_resource path="res://natural/title_cave_cave.mesh" type="ArrayMesh" id=11]
 [ext_resource path="res://natural/title_cave_egg.mesh" type="ArrayMesh" id=12]
 [ext_resource path="res://natural/lava.png" type="Texture" id=13]
+[ext_resource path="res://interface/intro_menu_2d.tscn" type="PackedScene" id=14]
+[ext_resource path="res://interface/splash.png" type="Texture" id=15]
+[ext_resource path="res://addons/vr_screenholder/screen_holder.gd" type="Script" id=16]
+[ext_resource path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" type="PackedScene" id=17]
+[ext_resource path="res://addons/godot-xr-tools/misc/vr_common_shader_cache.tscn" type="PackedScene" id=18]
+[ext_resource path="res://addons/godot-xr-tools/staging/loading_screen.tscn" type="PackedScene" id=19]
+[ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=20]
+
+[sub_resource type="Environment" id=10]
+background_mode = 1
+ambient_light_color = Color( 0.125, 0.125, 0.25, 1 )
+ambient_light_sky_contribution = 0.0
 
 [sub_resource type="PlaneMesh" id=11]
 size = Vector2( 30, 15 )
@@ -39,268 +44,54 @@ material = SubResource( 7 )
 offsets = PoolRealArray( 0, 0.139665, 0.893855, 1 )
 colors = PoolColorArray( 0, 0, 0, 1, 0.04, 0, 0, 1, 0.04, 0, 0, 1, 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=1]
-size = 160
-outline_color = Color( 1, 0.666667, 0, 1 )
-font_data = ExtResource( 3 )
-
-[sub_resource type="Animation" id=4]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("Splash/Logo:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Menu:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Splash:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("BlackScreen:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Splash/Intro:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ false ]
-}
-tracks/5/type = "bezier"
-tracks/5/path = NodePath("Splash/Intro:percent_visible")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0 )
-}
-
-[sub_resource type="Animation" id=5]
-resource_name = "jingle"
-length = 6.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("Splash/Logo:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3, 1.7 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ false, true, false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Menu:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 6 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, true ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Splash:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0, 6 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-tracks/3/type = "method"
-tracks/3/path = NodePath("ScreenFlash")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
-"values": [  ]
-}
-tracks/4/type = "method"
-tracks/4/path = NodePath("Jingle")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 0.0 ],
-"method": "play"
-} ]
-}
-tracks/5/type = "method"
-tracks/5/path = NodePath("Music")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 6 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 0.0 ],
-"method": "play"
-} ]
-}
-tracks/6/type = "value"
-tracks/6/path = NodePath("Splash/Intro:visible")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/keys = {
-"times": PoolRealArray( 0, 2.5, 5.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ false, true, false ]
-}
-tracks/7/type = "bezier"
-tracks/7/path = NodePath("Splash/Intro:percent_visible")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 2.5, 4 )
-}
-tracks/8/type = "method"
-tracks/8/path = NodePath("PressTimer")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/keys = {
-"times": PoolRealArray( 6 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ -1 ],
-"method": "start"
-} ]
-}
-
-[sub_resource type="Animation" id=6]
-resource_name = "start"
-length = 4.5
-tracks/0/type = "method"
-tracks/0/path = NodePath("ScreenFlash")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ Color( 1, 1, 1, 0.501961 ), 1.0 ],
-"method": "flash"
-} ]
-}
-tracks/1/type = "method"
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 4.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "start_game"
-} ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("BlackScreen:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 2.5 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-
-[sub_resource type="Environment" id=10]
-background_mode = 1
-ambient_light_color = Color( 0.125, 0.125, 0.25, 1 )
-ambient_light_sky_contribution = 0.0
-
 [node name="Menu" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="Cave" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -1.5, 0 )
-mesh = ExtResource( 11 )
+[node name="StartSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+bus = "Music"
 
-[node name="Lava" type="MeshInstance" parent="Cave"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 10 )
+
+[node name="LoadingScreen" parent="." instance=ExtResource( 19 )]
+splash_screen = ExtResource( 15 )
+enable_press_to_continue = true
+
+[node name="FPController" parent="." instance=ExtResource( 20 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.33519 )
+
+[node name="ARVRCamera" parent="FPController" index="1"]
+far = 1000.0
+
+[node name="VRCommonShaderCache" parent="FPController/ARVRCamera" index="0" instance=ExtResource( 18 )]
+
+[node name="intro_scene_holder" type="Spatial" parent="."]
+script = ExtResource( 16 )
+vrCamera_path = NodePath("../FPController/ARVRCamera")
+distance = 5.0
+
+[node name="Viewport2Din3D" parent="intro_scene_holder" instance=ExtResource( 17 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2.5 )
+screen_size = Vector2( 4, 2 )
+viewport_size = Vector2( 1920, 1080 )
+unshaded = true
+scene = ExtResource( 14 )
+update_mode = 2
+
+[node name="Cave" type="MeshInstance" parent="intro_scene_holder"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.5, -1.5, 0 )
+mesh = ExtResource( 11 )
+skeleton = NodePath("../..")
+
+[node name="Lava" type="MeshInstance" parent="intro_scene_holder/Cave"]
 transform = Transform( 0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -8, -0.1, 8 )
 mesh = SubResource( 11 )
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 material/0 = SubResource( 12 )
 
-[node name="Egg" type="MeshInstance" parent="."]
-transform = Transform( 0.95977, 0.171968, -0.221963, -0.129478, 0.972501, 0.193592, 0.249151, -0.157065, 0.955644, 0.638488, -0.606634, -1.29689 )
-mesh = ExtResource( 12 )
-skeleton = NodePath("../CPUParticles")
-
-[node name="CPUParticles" type="CPUParticles" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 3 )
+[node name="CPUParticles" type="CPUParticles" parent="intro_scene_holder/Cave"]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 5.5, 1.5, -3 )
 lifetime = 2.0
 mesh = SubResource( 8 )
 gravity = Vector3( 0, 5, 0 )
@@ -311,146 +102,16 @@ scale_amount = 10.0
 scale_amount_random = 0.5
 color_ramp = SubResource( 9 )
 
-[node name="OmniLight" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 4 )
+[node name="OmniLight" type="OmniLight" parent="intro_scene_holder/Cave"]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 5.5, 2.5, -4 )
 light_color = Color( 1, 0.625, 0.5, 1 )
 omni_range = 100.0
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.996195, -0.0871557, 0, 0.0871557, 0.996195, -0.5, -0.5, 8 )
-fov = 55.0
-far = 800.0
+[node name="Egg" type="MeshInstance" parent="intro_scene_holder"]
+transform = Transform( 0.95977, 0.171968, -0.221963, -0.129478, 0.972501, 0.193592, 0.249151, -0.157065, 0.955644, 0.638488, -0.606634, -1.29689 )
+mesh = ExtResource( 12 )
+skeleton = NodePath("../Cave/CPUParticles")
 
-[node name="Splash" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[connection signal="continue_pressed" from="LoadingScreen" to="." method="_on_LoadingScreen_continue_pressed"]
 
-[node name="ColorRect" type="ColorRect" parent="Splash"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="Logo" type="TextureRect" parent="Splash"]
-visible = false
-anchor_left = 0.15
-anchor_top = 0.15
-anchor_right = 0.85
-anchor_bottom = 0.85
-texture = ExtResource( 5 )
-expand = true
-stretch_mode = 6
-
-[node name="Intro" type="Label" parent="Splash"]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -960.0
-margin_top = -540.0
-margin_right = 960.0
-margin_bottom = 540.0
-theme = ExtResource( 2 )
-custom_colors/font_color = Color( 0.8, 0, 0, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
-text = "In the depths of Earth,
- something has awakened..."
-align = 1
-valign = 1
-percent_visible = 0.0
-
-[node name="Menu" type="Control" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = ExtResource( 2 )
-
-[node name="TopBar" type="ColorRect" parent="Menu"]
-anchor_right = 1.0
-anchor_bottom = 0.2
-color = Color( 0, 0, 0, 1 )
-
-[node name="Title" type="Label" parent="Menu/TopBar"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -384.0
-margin_top = -93.5
-margin_right = 384.0
-margin_bottom = 93.5
-custom_colors/font_color = Color( 0.8, 0, 0, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
-custom_fonts/font = SubResource( 1 )
-text = "REDORAHN"
-align = 1
-valign = 1
-
-[node name="PressStart" type="Label" parent="Menu"]
-anchor_left = 0.5
-anchor_top = 0.775
-anchor_right = 0.5
-anchor_bottom = 0.775
-margin_left = -169.5
-margin_top = -18.0
-margin_right = 169.5
-margin_bottom = 18.0
-size_flags_horizontal = 4
-size_flags_vertical = 6
-theme = ExtResource( 9 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
-text = "Press any key to start"
-
-[node name="BottomBar" type="ColorRect" parent="Menu"]
-anchor_top = 0.9
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="Copyright" type="Label" parent="Menu/BottomBar"]
-anchor_left = 0.5
-anchor_top = 0.975
-anchor_right = 0.5
-anchor_bottom = 0.975
-margin_left = -960.0
-margin_top = -60.3
-margin_right = 960.0
-margin_bottom = -24.3
-custom_colors/font_color = Color( 0.25, 0.25, 0.25, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
-text = "© Curious Planet 2022"
-align = 1
-valign = 2
-
-[node name="BlackScreen" type="ColorRect" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="ScreenFlash" parent="." instance=ExtResource( 7 )]
-
-[node name="Jingle" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 6 )
-bus = "Music"
-
-[node name="StartSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 8 )
-bus = "Music"
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
-bus = "Music"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 4 )
-anims/jingle = SubResource( 5 )
-anims/start = SubResource( 6 )
-
-[node name="PressTimer" type="Timer" parent="."]
-wait_time = 0.545
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 10 )
-
-[connection signal="timeout" from="PressTimer" to="." method="switch_press_text"]
+[editable path="FPController"]

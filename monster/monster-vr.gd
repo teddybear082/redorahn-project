@@ -263,6 +263,10 @@ func hit(area):
 
 
 func _on_left_controller_pressed(button):
+	if button == fire_button:
+		$FPController/ARVRCamera/FireParticles.visible = true
+		$FireSound.play()
+	
 	if button == attack_button:
 		lattack_area.monitorable = true
 		lattack_area.monitoring = true
@@ -286,6 +290,10 @@ func _on_right_controller_pressed(button):
 			
 			
 func _on_left_controller_released(button):
+	if button == fire_button:
+		$FPController/ARVRCamera/FireParticles.visible = false
+		$FireSound.stop()
+	
 	if button == attack_button:
 		lattack_area.monitorable = false
 		lattack_area.monitoring = false

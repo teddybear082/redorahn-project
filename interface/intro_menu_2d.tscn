@@ -1,0 +1,377 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://interface/screenflash.tscn" type="PackedScene" id=1]
+[ext_resource path="res://interface/fonts/DejaVuSansMono-Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://interface/interface_theme_italic.tres" type="Theme" id=3]
+[ext_resource path="res://interface/interface_theme.tres" type="Theme" id=4]
+[ext_resource path="res://interface/logo_texture.png" type="Texture" id=5]
+[ext_resource path="res://interface/intro_menu_2d.gd" type="Script" id=6]
+[ext_resource path="res://sounds/curious_jingle.wav" type="AudioStream" id=7]
+[ext_resource path="res://musics/title.ogg" type="AudioStream" id=8]
+
+[sub_resource type="DynamicFont" id=1]
+size = 160
+outline_color = Color( 1, 0.666667, 0, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Splash/Logo:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Menu:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Splash:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("BlackScreen:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Splash/Intro:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("Splash/Intro:percent_visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "jingle"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Splash/Logo:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 1.7 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Menu:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Splash:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath("ScreenFlash")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath("Jingle")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+} ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("Music")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+} ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Splash/Intro:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 2.5, 5.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("Splash/Intro:percent_visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 2.5, 4 )
+}
+tracks/8/type = "method"
+tracks/8/path = NodePath("PressTimer")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ -1 ],
+"method": "start"
+} ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "start"
+length = 4.5
+tracks/0/type = "method"
+tracks/0/path = NodePath("ScreenFlash")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ Color( 1, 1, 1, 0.501961 ), 1.0 ],
+"method": "flash"
+} ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 4.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "start_game"
+} ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("BlackScreen:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 2.5 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[node name="intro_menu_2d" type="Node"]
+script = ExtResource( 6 )
+
+[node name="Splash" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="Splash"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Logo" type="TextureRect" parent="Splash"]
+visible = false
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+
+[node name="Intro" type="Label" parent="Splash"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 540.0
+theme = ExtResource( 4 )
+custom_colors/font_color = Color( 0.8, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
+text = "In the depths of Earth,
+ something has awakened..."
+align = 1
+valign = 1
+percent_visible = 0.0
+
+[node name="Menu" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 4 )
+
+[node name="TopBar" type="ColorRect" parent="Menu"]
+anchor_right = 1.0
+anchor_bottom = 0.2
+color = Color( 0, 0, 0, 1 )
+
+[node name="Title" type="Label" parent="Menu/TopBar"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -384.0
+margin_top = -93.5
+margin_right = 384.0
+margin_bottom = 93.5
+custom_colors/font_color = Color( 0.8, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
+custom_fonts/font = SubResource( 1 )
+text = "REDORAHN"
+align = 1
+valign = 1
+
+[node name="PressStart" type="Label" parent="Menu"]
+anchor_left = 0.5
+anchor_top = 0.775
+anchor_right = 0.5
+anchor_bottom = 0.775
+margin_left = -169.5
+margin_top = -18.0
+margin_right = 169.5
+margin_bottom = 18.0
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
+text = "Press any key to start"
+
+[node name="BottomBar" type="ColorRect" parent="Menu"]
+anchor_top = 0.9
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Copyright" type="Label" parent="Menu/BottomBar"]
+anchor_left = 0.5
+anchor_top = 0.975
+anchor_right = 0.5
+anchor_bottom = 0.975
+margin_left = -960.0
+margin_top = -60.3
+margin_right = 960.0
+margin_bottom = -24.3
+custom_colors/font_color = Color( 0.25, 0.25, 0.25, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0 )
+text = "© Curious Planet 2022"
+align = 1
+valign = 2
+
+[node name="BlackScreen" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ScreenFlash" parent="." instance=ExtResource( 1 )]
+
+[node name="Jingle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+bus = "Music"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+bus = "Music"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 2 )
+anims/jingle = SubResource( 3 )
+anims/start = SubResource( 4 )
+
+[node name="PressTimer" type="Timer" parent="."]
+wait_time = 0.545
+
+[connection signal="timeout" from="PressTimer" to="." method="switch_press_text"]
