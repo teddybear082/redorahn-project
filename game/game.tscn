@@ -65,6 +65,9 @@ _data = {
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
 
+[node name="Monster" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 10, 244 )
+
 [node name="World" type="Spatial" parent="."]
 
 [node name="Terrain" type="StaticBody" parent="World"]
@@ -4512,9 +4515,6 @@ bus = "Music"
 
 [node name="GameOverJingle" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 40 )
-
-[node name="Monster" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 10, 244 )
 
 [connection signal="timeout" from="HumanSpawnTimer" to="." method="generate_human"]
 [connection signal="timeout" from="VehicleSpawnTimer" to="." method="generate_vehicle"]

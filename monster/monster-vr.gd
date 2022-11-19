@@ -10,7 +10,7 @@ export var roar = false
 export (XRTools.Buttons) var roar_button : int = XRTools.Buttons.VR_BUTTON_BY
 export (XRTools.Buttons) var grab_button : int = XRTools.Buttons.VR_GRIP
 export (XRTools.Buttons) var fire_button : int = XRTools.Buttons.VR_BUTTON_BY
-
+export (XRTools.Buttons) var attack_button : int = XRTools.Buttons.VR_TRIGGER
 
 var max_health = 1000
 var health = max_health
@@ -22,6 +22,9 @@ var grabbed_object = null
 onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
 onready var lstomp_area = $FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea
 onready var rstomp_area = $FPController/monster/Armature/Skeleton/RightFootAnchor/RStompArea
+onready var lattack_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea
+onready var rattack_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/RAttackArea
+onready var lsmash_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea/SmashAttackArea
 onready var player = $FPController/monster/AnimationPlayer
 onready var player_body = $FPController/PlayerBody
 onready var player_model = $FPController/monster
@@ -42,7 +45,8 @@ func _ready():
 	# Connect controller signals
 	left_controller.connect("button_pressed", self, "_on_left_controller_pressed")
 	right_controller.connect("button_pressed", self, "_on_right_controller_pressed")
-	
+	left_controller.connect("button_release", self, "_on_left_controller_released")
+	right_controller.connect("button_release", self, "_on_right_controller_released")
 	
 #func _unhandled_input(event):
 #	if event is InputEventMouseMotion:
@@ -252,9 +256,45 @@ func hit(area):
 	if health == 0:
 		set_state(STATE_DEAD, "die")
 
+
 func _on_left_controller_pressed(button):
-	pass
-	
+	if button == attack_button:
+		lattack_area.monitorable = true
+		lattack_area.monitoring = true
+		
+	if button == grab_button:
+		lsmash_area.monitorable = true
+		lsmash_area.monitoring = true
+		
+		
 func _on_right_controller_pressed(button):
 	if button == roar_button:
 		$RoarSound.play()
+		
+	if button == attack_button:
+		rattack_area.monitorable = true
+		rattack_area.monitoring = true
+		
+	if button == grab_button:
+		grab_area.monitorable = true
+		grab_area.monitoring = true
+			
+			
+func _on_left_controller_released(button):
+	if button == attack_button:
+		lattack_area.monitorable = false
+		lattack_area.monitoring = false
+	
+	if button == grab_button:
+		lsmash_area.monitorable = false
+		lsmash_area.monitoring = false
+		
+	
+func _on_right_controller_released(button):
+	if button == attack_button:
+		rattack_area.monitorable = false
+		rattack_area.monitoring = false
+		
+	if button == grab_button:
+		grab_area.monitorable = false
+		grab_area.monitoring = false

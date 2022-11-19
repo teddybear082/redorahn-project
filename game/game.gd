@@ -38,12 +38,14 @@ var aliens = false
 
 onready var monster = $Monster
 onready var monster_fp_controller = monster.get_node("FPController")
+
+
 func _ready():
-	$Monster.connect("died", self, "monster_died")
+	monster.connect("died", self, "monster_died")
 	
 	for n in get_tree().get_nodes_in_group("buildings"):
 		n.game = self
-		n.connect("shake_screen", $Monster, "shake")
+		n.connect("shake_screen", monster, "shake")
 	
 	for n in get_tree().get_nodes_in_group("vehicles"):
 		n.game = self
@@ -56,7 +58,7 @@ func _ready():
 
 
 func _process(delta):
-	$Interface.update_health($Monster.health, $Monster.max_health)
+	$Interface.update_health(monster.health, monster.max_health)
 
 
 func score(points):
@@ -207,7 +209,8 @@ func generate_vehicle():
 	
 	var vehicle = scene.instance()
 	vehicle.game = self
-	vehicle.monster = $Monster
+	vehicle.monster = monster
+	vehicle.monster_fp_controller = monster_fp_controller
 	
 	if path:
 		vehicle.path = path
@@ -216,7 +219,7 @@ func generate_vehicle():
 		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
 		loc *= 125.0
 		loc = loc.rotated(Vector3.UP, randf() - 0.5)
-		loc += $Monster.translation
+		loc += monster_fp_controller.translation
 		vehicle.translation = loc
 	
 	vehicle.translation.y = 1.0
@@ -256,7 +259,8 @@ func generate_human():
 	
 	var human = human_scenes[level].instance()
 	human.game = self
-	human.monster = $Monster
+	human.monster = monster
+	human.monster_fp_controller = monster_fp_controller
 	if path:
 		human.path = path
 		human.translation = path.translation + Vector3(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0, randf() * 2.0 - 1.0)
@@ -264,7 +268,7 @@ func generate_human():
 		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
 		loc *= 50.0
 		loc = loc.rotated(Vector3.UP, randf() - 0.5)
-		loc += $Monster.translation
+		loc += monster_fp_controller.translation
 		human.translation = loc
 		
 	human.translation.y = 1.0
@@ -276,7 +280,7 @@ func generate_human():
 func spawn_human(location, level = 0):
 	var human = human_scenes[level].instance()
 	human.game = self
-	human.monster = $Monster
+	human.monster = monster
 	human.monster_fp_controller = monster_fp_controller
 	human.translation = location
 	if level > 0:
@@ -318,7 +322,8 @@ func spawn_rocket(location, velocity):
 func spawn_plasma(location, velocity):
 	var plasma = plasma_scene.instance()
 	plasma.game = self
-	plasma.monster = $Monster
+	plasma.monster = monster
+	plasma.monster_fp_controller = monster_fp_controller
 	plasma.translation = location
 	plasma.velocity = velocity
 	add_child(plasma)
