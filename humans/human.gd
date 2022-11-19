@@ -30,8 +30,7 @@ onready var player = $Origin/AnimationPlayer
 func _ready():
 	if not monster:
 		remove()
-	#if monster:
-		#monster_fp_controller = monster.get_node("FPController")
+	
 	translation.y = 0.7
 	if randi() % 100 < 50:
 		path_direction = -1.0
@@ -228,6 +227,17 @@ func splat():
 		$SplatMesh.visible = true
 		$BloodParticles.restart()
 
+
+func throw(loc, vel):
+	if game:
+		get_parent().remove_child(self)
+		game.add_child(self)
+		translation = loc
+		velocity = vel
+		rotation.z = 90.0
+		$CollisionShape.disabled = false
+		yield(get_tree().create_timer(2.5), "timeout")
+		splat()
 
 func eat():
 	game.kill()

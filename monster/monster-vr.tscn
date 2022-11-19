@@ -53,6 +53,7 @@ offsets = PoolRealArray( 0.128492, 0.363128, 0.687151, 1 )
 colors = PoolColorArray( 1, 0.75, 0.25, 1, 0.915948, 0.0280172, 0.0280172, 1, 0.25, 0.25, 0.25, 1, 0.25098, 0.25098, 0.25098, 0 )
 
 [sub_resource type="SphereShape" id=14]
+radius = 0.2
 
 [sub_resource type="Resource" id=10]
 script = ExtResource( 27 )
@@ -224,7 +225,7 @@ color_ramp = SubResource( 4 )
 script = ExtResource( 28 )
 
 [node name="EatingArea" type="Area" parent="FPController/ARVRCamera" index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0 )
+collision_mask = 273
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/ARVRCamera/EatingArea"]
 shape = SubResource( 14 )
@@ -486,6 +487,12 @@ monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
 shape = SubResource( 6 )
+
+[node name="GrabRayCast" type="RayCast" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
+transform = Transform( -0.00404078, -0.996119, 0.0879157, 0.994201, 0.00544739, 0.107407, -0.107467, 0.0878403, 0.990321, 2.38419e-07, -1.19209e-07, 0 )
+enabled = true
+cast_to = Vector3( 10, 0, 0 )
+collision_mask = 384
 
 [node name="LeftFootAnchor" type="BoneAttachment" parent="FPController/monster/Armature/Skeleton"]
 transform = Transform( 1, -1.77636e-13, 2.38419e-07, 2.29679e-07, -0.268273, -0.963343, 6.39612e-08, 0.963343, -0.268273, 1.8, -6.28817, -2.23979 )

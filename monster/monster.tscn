@@ -190,6 +190,9 @@ monitorable = false
 [node name="CollisionShape" type="CollisionShape" parent="Origin/MonsterArmature/Skeleton/RightHandAnchor/GrabArea"]
 shape = SubResource( 9 )
 
+[node name="GrabRayCast" type="RayCast" parent="Origin/MonsterArmature/Skeleton/RightHandAnchor/GrabArea"]
+cast_to = Vector3( 2, 0, 0 )
+
 [node name="LeftFootAnchor" type="BoneAttachment" parent="Origin/MonsterArmature/Skeleton" index="3"]
 transform = Transform( 1, -7.10543e-15, 2.38419e-07, 2.29679e-07, -0.268273, -0.963343, 6.39612e-08, 0.963343, -0.268273, 1.8, -6.28817, -2.23979 )
 bone_name = "foot_l"

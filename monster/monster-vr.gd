@@ -22,6 +22,7 @@ var fire = preload("res://effects/fire.tscn")
 var able_to_torch: bool = true
 
 onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
+onready var grab_raycast = grab_area.get_node("GrabRayCast")
 onready var lstomp_area = $FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea
 onready var rstomp_area = $FPController/monster/Armature/Skeleton/RightFootAnchor/RStompArea
 onready var lattack_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea
@@ -226,13 +227,25 @@ func grab(object):
 	object.get_parent().call_deferred("remove_child", object)
 	grab_area.call_deferred("add_child", object)
 	object.translation = Vector3.ZERO
+	if object.is_in_group("humans"):
+		object.state = object.STATE_GRABBED
+		object.get_node("Origin").rotation = Vector3.ZERO
+		object.get_node("Hitbox").set_deferred("monitoring", false)
+	if object.is_in_group("vehicles"):
+		object.state = object.STATE_GRABBED
+		object.transform.origin = Vector3.ZERO
+		object.get_node("CollisionShape").disabled = true
+		object.get_node("Origin").rotation = Vector3.ZERO
+		object.get_node("AttackTimer").stop()
+		object.get_node("DropTimer").stop()
+		object.get_node("Hitbox").set_deferred("monitoring", false)
 	grabbed_object = object
 	return true
 
 
 func throw():
 	if grabbed_object:
-		var vel = Vector3.FORWARD.rotated(Vector3.UP, $Origin.rotation.y)
+		var vel = Vector3.FORWARD.rotated(Vector3.UP, grabbed_object.get_node("Origin").rotation.y)
 		vel *= 150.0
 		vel.y = 50.0
 		grabbed_object.throw(grab_area.global_translation, vel)
@@ -304,9 +317,10 @@ func _on_right_controller_pressed(button):
 		rattack_area.monitoring = true
 		
 	if button == grab_button:
-		grab_area.monitorable = true
-		grab_area.monitoring = true
-			
+		if grab_raycast:
+			if grab_raycast.is_colliding():
+				grab(grab_raycast.get_collider())
+	
 			
 func _on_left_controller_released(button):
 	if button == fire_button:
@@ -329,18 +343,19 @@ func _on_right_controller_released(button):
 		rattack_area.monitoring = false
 		
 	if button == grab_button:
-		grab_area.monitorable = false
-		grab_area.monitoring = false
-
-
+		if grabbed_object:
+			throw()
+			
+			
 func _play_step_sound():
 	step_sound.play()
 
 
 func _on_EatingArea_body_entered(body):
 	if body.is_in_group("humans"):
+		grabbed_object=null
 		eat_sound.play()
-		call_deferred(body.queue_free())
+		body.queue_free()
 
 
 func _on_TorchTimer_timeout():
