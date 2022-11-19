@@ -4514,7 +4514,7 @@ bus = "Music"
 stream = ExtResource( 40 )
 
 [node name="Monster" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 100, 244 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 10, 244 )
 
 [connection signal="timeout" from="HumanSpawnTimer" to="." method="generate_human"]
 [connection signal="timeout" from="VehicleSpawnTimer" to="." method="generate_vehicle"]

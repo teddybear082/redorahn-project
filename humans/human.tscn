@@ -56,6 +56,7 @@ script = ExtResource( 1 )
 
 [node name="Skeleton" parent="Origin/HumanArmature" index="0"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+bones/22/bound_children = [ NodePath("HandAnchor") ]
 
 [node name="HandAnchor" type="BoneAttachment" parent="Origin/HumanArmature/Skeleton" index="1"]
 transform = Transform( -0.997817, -0.0660321, -8.90919e-06, 0.0660321, -0.997817, 5.69495e-07, -8.9407e-06, 0, 1, -0.17611, -0.108159, -1.62327e-07 )

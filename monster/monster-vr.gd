@@ -7,6 +7,10 @@ signal died
 
 export var locked = false
 export var roar = false
+export (XRTools.Buttons) var roar_button : int = XRTools.Buttons.VR_BUTTON_BY
+export (XRTools.Buttons) var grab_button : int = XRTools.Buttons.VR_GRIP
+export (XRTools.Buttons) var fire_button : int = XRTools.Buttons.VR_BUTTON_BY
+
 
 var max_health = 1000
 var health = max_health
@@ -21,16 +25,24 @@ onready var rstomp_area = $FPController/monster/Armature/Skeleton/RightFootAncho
 onready var player = $FPController/monster/AnimationPlayer
 onready var player_body = $FPController/PlayerBody
 onready var player_model = $FPController/monster
+onready var left_controller : ARVRController = $FPController/LeftHandController
+onready var right_controller : ARVRController = $FPController/RightHandController
+
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	player_body.set_player_radius(3.5)
-	player_body.override_player_height(self, 6)
+	player_body.set_player_radius(2)
+	player_body.override_player_height(self, 4.25)
 	
 	# Shrink head bone to make robot avatar's head invisible to player
 	var head_bone_pose = player_model.get_node("Armature/Skeleton").get_bone_pose(3)
 	var new_head_basis = head_bone_pose.basis.scaled(Vector3(0,0,0))
 	player_model.get_node("Armature/Skeleton").set_bone_pose(3, Transform(new_head_basis, head_bone_pose.origin))
 	player_model.get_node("Armature/Skeleton").set_bone_rest(3, Transform(new_head_basis, head_bone_pose.origin))
+	
+	# Connect controller signals
+	left_controller.connect("button_pressed", self, "_on_left_controller_pressed")
+	right_controller.connect("button_pressed", self, "_on_right_controller_pressed")
+	
 	
 #func _unhandled_input(event):
 #	if event is InputEventMouseMotion:
@@ -40,7 +52,7 @@ func _ready():
 #		$CameraPivot.rotation_degrees.x = clamp($CameraPivot.rotation_degrees.x, -75.0, 25.0)
 
 
-func _physics_process(delta):
+#func _physics_process(delta):
 #	# Camera update
 #	var camera_speed = 3.0
 #	$CameraPivot.rotation_degrees.x -= Input.get_action_strength("camera_down") * camera_speed
@@ -64,97 +76,97 @@ func _physics_process(delta):
 #	# Monster update
 #	var velocity = Vector3.ZERO
 #	velocity.y = -10
-	var direction = Vector3.ZERO
-	
-	if state != STATE_GRAB:
-		grab_area.monitorable = false
-	
-	if state != STATE_ROAR:
-		roar = false
-	
-	match state:
-		STATE_IDLE:
-			player.playback_speed = 1.3
-			"""
-			direction.z += Input.get_axis("move_forward", "move_back")
-			direction.x += Input.get_axis("move_left", "move_right")
-			"""
-			direction.z -= Input.get_action_strength("move_forward")
-			direction.z += Input.get_action_strength("move_back")
-			direction.x -= Input.get_action_strength("move_left")
-			direction.x += Input.get_action_strength("move_right")
-	
-			if direction != Vector3.ZERO:
-				player.play("walk-loop")
-#				direction = direction.normalized()
-#				direction = direction.rotated(Vector3.UP, $CameraPivot.rotation.y)
-#				$Origin.look_at(translation + direction, Vector3.UP)
-#				velocity += direction * speed
-			else:
-				player.play("idle-loop")
-			
-			
-			if Input.is_action_just_pressed("attack"):
-				set_state(STATE_ATTACK_LEFT, "attack-left")
-			elif Input.is_action_just_pressed("smash"):
-				set_state(STATE_ATTACK_SMASH, "smash")
-			elif Input.is_action_just_pressed("grab"):
-				if not perform_grab_action():
-					set_state(STATE_GRAB, "grab")
-			elif Input.is_action_just_pressed("roar"):
-				set_state(STATE_ROAR, "roar")
-		
-		STATE_ATTACK_LEFT:
-			player.playback_speed = 2.4
-			if Input.is_action_just_pressed("attack") and not locked:
-				set_state(STATE_ATTACK_RIGHT, "attack-right")
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_ATTACK_RIGHT:
-			player.playback_speed = 2.4
-			if Input.is_action_just_pressed("attack") and not locked:
-				set_state(STATE_ATTACK_LEFT, "attack-left")
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_ATTACK_SMASH:
-			player.playback_speed = 2.4
-			if Input.is_action_just_pressed("smash") and not locked:
-				player.stop()
-				set_state(STATE_ATTACK_SMASH, "smash")
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_GRAB:
-			player.playback_speed = 1.0
-			if Input.is_action_just_pressed("grab") and not locked:
-				perform_grab_action()
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_ROAR:
-			player.playback_speed = 1.25
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_EAT:
-			player.playback_speed = 2.0
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_THROW:
-			player.playback_speed = 1.5
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-		
-		STATE_DEAD:
-			player.playback_speed = 1.0
-		
-		_:
-			if not player.is_playing():
-				set_state(STATE_IDLE)
-	
+#	var direction = Vector3.ZERO
+#
+#	if state != STATE_GRAB:
+#		grab_area.monitorable = false
+#
+#	if state != STATE_ROAR:
+#		roar = false
+#
+#	match state:
+#		STATE_IDLE:
+#			player.playback_speed = 1.3
+#			"""
+#			direction.z += Input.get_axis("move_forward", "move_back")
+#			direction.x += Input.get_axis("move_left", "move_right")
+#			"""
+#			direction.z -= Input.get_action_strength("move_forward")
+#			direction.z += Input.get_action_strength("move_back")
+#			direction.x -= Input.get_action_strength("move_left")
+#			direction.x += Input.get_action_strength("move_right")
+#
+#			if direction != Vector3.ZERO:
+#				player.play("walk-loop")
+##				direction = direction.normalized()
+##				direction = direction.rotated(Vector3.UP, $CameraPivot.rotation.y)
+##				$Origin.look_at(translation + direction, Vector3.UP)
+##				velocity += direction * speed
+#			else:
+#				player.play("idle-loop")
+#
+#
+#			if Input.is_action_just_pressed("attack"):
+#				set_state(STATE_ATTACK_LEFT, "attack-left")
+#			elif Input.is_action_just_pressed("smash"):
+#				set_state(STATE_ATTACK_SMASH, "smash")
+#			elif Input.is_action_just_pressed("grab"):
+#				if not perform_grab_action():
+#					set_state(STATE_GRAB, "grab")
+#			elif Input.is_action_just_pressed("roar"):
+#				set_state(STATE_ROAR, "roar")
+#
+#		STATE_ATTACK_LEFT:
+#			player.playback_speed = 2.4
+#			if Input.is_action_just_pressed("attack") and not locked:
+#				set_state(STATE_ATTACK_RIGHT, "attack-right")
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_ATTACK_RIGHT:
+#			player.playback_speed = 2.4
+#			if Input.is_action_just_pressed("attack") and not locked:
+#				set_state(STATE_ATTACK_LEFT, "attack-left")
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_ATTACK_SMASH:
+#			player.playback_speed = 2.4
+#			if Input.is_action_just_pressed("smash") and not locked:
+#				player.stop()
+#				set_state(STATE_ATTACK_SMASH, "smash")
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_GRAB:
+#			player.playback_speed = 1.0
+#			if Input.is_action_just_pressed("grab") and not locked:
+#				perform_grab_action()
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_ROAR:
+#			player.playback_speed = 1.25
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_EAT:
+#			player.playback_speed = 2.0
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_THROW:
+#			player.playback_speed = 1.5
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
+#		STATE_DEAD:
+#			player.playback_speed = 1.0
+#
+#		_:
+#			if not player.is_playing():
+#				set_state(STATE_IDLE)
+#
 #	move_and_slide(velocity)
 
 
@@ -239,3 +251,10 @@ func hit(area):
 	
 	if health == 0:
 		set_state(STATE_DEAD, "die")
+
+func _on_left_controller_pressed(button):
+	pass
+	
+func _on_right_controller_pressed(button):
+	if button == roar_button:
+		$RoarSound.play()

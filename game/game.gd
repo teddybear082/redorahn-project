@@ -36,7 +36,8 @@ var threat_level = 0
 var game_over = false
 var aliens = false
 
-
+onready var monster = $Monster
+onready var monster_fp_controller = monster.get_node("FPController")
 func _ready():
 	$Monster.connect("died", self, "monster_died")
 	
@@ -46,7 +47,8 @@ func _ready():
 	
 	for n in get_tree().get_nodes_in_group("vehicles"):
 		n.game = self
-		n.monster = $Monster
+		n.monster = monster
+		n.monster_fp_controller = monster_fp_controller
 		n.state = n.STATE_PARKED
 		n.set_kill_collision(false)
 		n.occupants = 0
@@ -112,7 +114,7 @@ func get_closest_path(target, vehicles = false):
 	var array = []
 	for n in parent.get_children():
 		var point = n.curve.get_closest_point(target)
-		if point.distance_to($Monster.translation) <= 50.0:
+		if point.distance_to(monster_fp_controller.translation) <= 50.0:
 			array.push_back(n)
 	
 	if array.size():
@@ -125,7 +127,7 @@ func get_closest_path_in_group(group, target):
 	var array = []
 	for n in get_tree().get_nodes_in_group(group):
 		var point = n.curve.get_closest_point(target)
-		if point.distance_to($Monster.translation) <= 50.0:
+		if point.distance_to(monster_fp_controller.translation) <= 50.0:
 			array.push_back(n)
 	
 	if array.size():
@@ -195,7 +197,7 @@ func generate_vehicle():
 	
 	var path = null
 	#var parent = get_closest_path($Monster.translation, true)
-	var parent = get_closest_path_in_group("vehicle_paths", $Monster.translation)
+	var parent = get_closest_path_in_group("vehicle_paths", monster_fp_controller.translation)
 	if parent:
 		path = PathFollow.new()
 		parent.add_child(path)
@@ -211,7 +213,7 @@ func generate_vehicle():
 		vehicle.path = path
 		vehicle.translation = path.translation
 	else:
-		var loc = ($MilitarySpawnPoint.translation - $Monster.translation).normalized()
+		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
 		loc *= 125.0
 		loc = loc.rotated(Vector3.UP, randf() - 0.5)
 		loc += $Monster.translation
@@ -244,7 +246,7 @@ func generate_human():
 		level = 1
 	
 	var path = null
-	var parent = get_closest_path_in_group("human_paths", $Monster.translation)
+	var parent = get_closest_path_in_group("human_paths", monster_fp_controller.translation)
 	if parent:
 		path = PathFollow.new()
 		parent.add_child(path)
@@ -259,7 +261,7 @@ func generate_human():
 		human.path = path
 		human.translation = path.translation + Vector3(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0, randf() * 2.0 - 1.0)
 	else:
-		var loc = ($MilitarySpawnPoint.translation - $Monster.translation).normalized()
+		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
 		loc *= 50.0
 		loc = loc.rotated(Vector3.UP, randf() - 0.5)
 		loc += $Monster.translation
@@ -275,6 +277,7 @@ func spawn_human(location, level = 0):
 	var human = human_scenes[level].instance()
 	human.game = self
 	human.monster = $Monster
+	human.monster_fp_controller = monster_fp_controller
 	human.translation = location
 	if level > 0:
 		human.state = human.STATE_CHASE

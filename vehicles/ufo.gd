@@ -13,7 +13,7 @@ func attack():
 		return
 	
 	var loc = $Origin/FirePosition.global_translation
-	var vel = (monster.translation - loc).normalized()
+	var vel = (monster_fp_controller.translation - loc).normalized()
 	vel *= 30.0
 	game.spawn_plasma(loc, vel)
 	$ShootSound.play()

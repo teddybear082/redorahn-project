@@ -14,6 +14,7 @@ var woman_screams = [preload("res://sounds/scream_f_a.wav"), preload("res://soun
 
 var game = null
 var monster = null
+var monster_fp_controller = null
 var path = null
 var path_direction = 1.0
 var woman = false
@@ -29,6 +30,8 @@ onready var player = $Origin/AnimationPlayer
 func _ready():
 	if not monster:
 		remove()
+	if monster:
+		monster_fp_controller = monster.get_node("FPController")
 	translation.y = 0.7
 	if randi() % 100 < 50:
 		path_direction = -1.0
@@ -60,7 +63,7 @@ func _process(delta):
 	if state == STATE_DEAD:
 		threshold = 40.0
 	if monster:
-		var distance = global_translation.distance_to(monster.translation)
+		var distance = global_translation.distance_to(monster_fp_controller.translation)
 		var trigger_distance = 25.0
 		if monster.roar:
 			trigger_distance = 40.0
@@ -95,10 +98,10 @@ func _physics_process(delta):
 			player.playback_speed = 4.0
 			if not monster:
 				return
-			if translation.distance_to(monster.translation) > 15.0:
-				velocity = (monster.translation - translation).normalized() * 4.0
+			if translation.distance_to(monster_fp_controller.translation) > 15.0:
+				velocity = (monster_fp_controller.translation - translation).normalized() * 4.0
 				velocity.y = 0.0
-				$Origin.look_at(monster.translation, Vector3.UP)
+				$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
 				$Origin.rotation.x = 0.0
 				$Origin.rotation.z = 0.0
 				velocity = move_and_slide(velocity, Vector3.UP)
@@ -109,10 +112,10 @@ func _physics_process(delta):
 		STATE_ATTACK:
 			if not monster:
 				return
-			$Origin.look_at(monster.translation, Vector3.UP)
+			$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
 			$Origin.rotation.x = 0.0
 			$Origin.rotation.z = 0.0
-			if translation.distance_to(monster.translation) > 25.0:
+			if translation.distance_to(monster_fp_controller.translation) > 25.0:
 				state = STATE_CHASE
 				if level == 0:
 					accessory.visible = false
@@ -149,7 +152,7 @@ func set_scared():
 	state = STATE_SCARED
 	$ScareTimer.wait_time = randi() % 3 + 1
 	$ScareTimer.start()
-	velocity = translation - monster.translation
+	velocity = translation - monster_fp_controller.translation
 	velocity = velocity.rotated(Vector3.UP, (randf() - 0.5) * 90.0)
 	velocity = velocity.normalized()
 	velocity *= 8.0

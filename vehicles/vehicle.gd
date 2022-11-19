@@ -15,6 +15,7 @@ var van_mesh = preload("res://vehicles/meshes/vehicles_van.mesh")
 
 var game = null
 var monster = null
+var monster_fp_controller = null
 var state = STATE_DRIVING
 var path
 var speed = 0.0
@@ -55,8 +56,10 @@ func _process(delta):
 	var threshold = 100.0
 	if level > 0:
 		threshold = 150.0
-	if monster and state != STATE_PARKED and $KillTimer.is_stopped() and global_translation.distance_to(monster.translation) > threshold:
-		remove()
+	if monster:
+		if monster_fp_controller:
+			if state != STATE_PARKED and $KillTimer.is_stopped() and global_translation.distance_to(monster_fp_controller.translation) > threshold:
+				remove()
 	
 	if monster and monster.state == monster.STATE_DEAD:
 		$AttackTimer.stop()
@@ -87,11 +90,11 @@ func _physics_process(delta):
 				velocity = move_and_slide(velocity, Vector3.UP)
 			
 			
-			if monster:
+			if monster and monster_fp_controller:
 				var trigger_distance = 20.0
 				if monster.roar:
 					trigger_distance = 40.0
-				if translation.distance_to(monster.translation) < trigger_distance and $FleeTimer.is_stopped():
+				if translation.distance_to(monster_fp_controller.translation) < trigger_distance and $FleeTimer.is_stopped():
 					$FleeTimer.start()
 		
 		STATE_CHASE:
@@ -100,13 +103,13 @@ func _physics_process(delta):
 				
 			speed += delta * 1.5
 			speed = clamp(speed, 0.0, max_speed)
-			$Origin.look_at(monster.translation, Vector3.UP)
+			$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
 			$Origin.rotation.x = 0.0
 			$Origin.rotation.z = 0.0
-			velocity = (monster.translation - translation).normalized() * speed * 3.0
+			velocity = (monster_fp_controller.translation - translation).normalized() * speed * 3.0
 			velocity.y = -5.0
 			velocity = move_and_slide(velocity, Vector3.UP)
-			if global_translation.distance_to(monster.translation) < 25.0:
+			if global_translation.distance_to(monster_fp_controller.translation) < 25.0:
 				speed = 0.0
 				state = STATE_ATTACK
 				set_kill_collision(false)
@@ -125,7 +128,7 @@ func _physics_process(delta):
 			if can_drop and velocity.length() < 10.0 and $DropTimer.is_stopped():
 				$DropTimer.start()
 			
-			if occupants and global_translation.distance_to(monster.translation) > 40.0:
+			if occupants and global_translation.distance_to(monster_fp_controller.translation) > 40.0:
 				state = STATE_CHASE
 				set_kill_collision(true)
 				$DropTimer.stop()
@@ -164,7 +167,7 @@ func _physics_process(delta):
 			if can_attack and $AttackTimer.is_stopped():
 				$AttackTimer.start()
 				
-			var dist = translation.distance_to(monster.translation)
+			var dist = translation.distance_to(monster_fp_controller.translation)
 			if dist > 25.0:
 				speed += delta * 10.0
 			elif dist < 15.0:
@@ -173,14 +176,14 @@ func _physics_process(delta):
 				speed *= 0.95
 			speed = clamp(speed, -20.0, 10.0)
 			velocity = Vector3.FORWARD * speed
-			var angle = Vector3.FORWARD.signed_angle_to(((monster.translation - translation) * Vector3(1.0, 0.0, 1.0)).normalized(), Vector3.UP)
+			var angle = Vector3.FORWARD.signed_angle_to(((monster_fp_controller.translation - translation) * Vector3(1.0, 0.0, 1.0)).normalized(), Vector3.UP)
 			velocity = velocity.rotated(Vector3.UP, angle)
 			velocity.y = (8.0 + abs(speed) * 0.5) - translation.y
 			move_and_slide(velocity, Vector3.UP)
 			if level == 3:
 				$Origin.rotation_degrees.y += 180.0 * delta
 			else:
-				$Origin.look_at(monster.translation, Vector3.UP)
+				$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
 				$Origin.rotation_degrees.x = speed * -2.0
 				$Origin.rotation.z = 0.0
 		
@@ -213,7 +216,7 @@ func attack():
 func flee():
 	if state == STATE_DRIVING:
 		state = STATE_FLEEING
-		flee_angle = (translation - monster.translation)
+		flee_angle = (translation - monster_fp_controller.translation)
 		flee_angle *= Vector3(1.0, 0.0, 1.0)
 		flee_angle = flee_angle.normalized()
 		flee_angle = Vector3.FORWARD.signed_angle_to(flee_angle, Vector3.UP)

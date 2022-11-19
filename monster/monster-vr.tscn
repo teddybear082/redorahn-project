@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://sounds/monster_die.wav" type="AudioStream" id=23]
 [ext_resource path="res://sounds/monster_roar.wav" type="AudioStream" id=24]
 [ext_resource path="res://addons/godot-xr-tools/player/player_body.tscn" type="PackedScene" id=25]
+[ext_resource path="res://addons/godot-xr-tools/functions/movement_jump.tscn" type="PackedScene" id=26]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "Monster"
@@ -179,6 +180,9 @@ strafe = true
 
 [node name="MovementTurn" parent="FPController/RightHandController" index="1" instance=ExtResource( 16 )]
 
+[node name="MovementJump" parent="FPController/RightHandController" index="2" instance=ExtResource( 26 )]
+jump_button_id = 7
+
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
 
 [node name="monster" type="Spatial" parent="FPController"]
@@ -193,8 +197,12 @@ left_hand_rotation_degs = Vector3( 90, 90, -90 )
 right_hand_rotation_degs = Vector3( 90, -90, 90 )
 head_visible = true
 height_offset = 2.5
+ik_raycast_height = 4.0
 avatar_z_offset = 2.0
 use_procedural_walk = true
+step_anim_height = 1.0
+step_distance = 1.0
+max_legs_spread = 1.5
 
 [node name="Armature" type="Spatial" parent="FPController/monster"]
 
@@ -366,8 +374,6 @@ bone_name = "fingers_l"
 [node name="LAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor"]
 collision_layer = 2
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea"]
 shape = SubResource( 4 )
@@ -376,8 +382,6 @@ shape = SubResource( 4 )
 transform = Transform( 1, 2.98023e-08, 0, -1.49012e-08, 1, -3.35276e-08, 2.98023e-08, -5.58794e-09, 1, -0.545582, 2.87747, -0.650013 )
 collision_layer = 2
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea/SmashAttackArea"]
 transform = Transform( 1, -9.31323e-10, -1.49012e-08, -1.86265e-09, 1, -1.30385e-08, -1.49012e-08, 9.48785e-09, 1, 1.99354, 0.0234688, 0.15885 )
@@ -390,8 +394,6 @@ bone_name = "fingers_r"
 [node name="RAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/RightHandAnchor"]
 collision_layer = 2
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/RAttackArea"]
 shape = SubResource( 4 )
@@ -400,8 +402,6 @@ shape = SubResource( 4 )
 transform = Transform( 1, 8.9407e-08, 7.45058e-09, 0, 1, -5.58794e-08, -5.58794e-08, -4.09782e-08, 1, 0.316347, 0.840722, -0.324262 )
 collision_layer = 8
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
 shape = SubResource( 6 )
@@ -414,8 +414,6 @@ bone_name = "foot_l"
 transform = Transform( 1, 3.55271e-15, 4.9738e-14, -2.4869e-14, 0.999999, 5.96046e-08, 1.14131e-13, 0, 1, -1.19209e-07, 1.14299, -0.318299 )
 collision_layer = 4
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="StompShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea"]
 shape = SubResource( 7 )
@@ -428,8 +426,6 @@ bone_name = "foot_r"
 transform = Transform( 1, 0, -5.32907e-15, 0, 0.999999, 2.98023e-08, 3.19744e-14, 0, 1, -1.19209e-07, 1.14299, -0.318299 )
 collision_layer = 4
 collision_mask = 0
-monitoring = false
-monitorable = false
 
 [node name="StompShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightFootAnchor/RStompArea"]
 shape = SubResource( 7 )
@@ -450,7 +446,6 @@ anims/walk-loop = ExtResource( 5 )
 [node name="Hitbox" type="Area" parent="FPController"]
 collision_layer = 0
 collision_mask = 15360
-monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/Hitbox"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
@@ -488,5 +483,7 @@ bus = "SFX"
 stream = ExtResource( 19 )
 pitch_scale = 0.7
 bus = "SFX"
+
+[connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]
 
 [editable path="FPController"]

@@ -13,7 +13,7 @@ func attack():
 	if rockets:
 		if burst % 2 == 1:
 			loc = $Origin/LRocketPosition.global_translation
-			vel = (monster.translation - loc).normalized()
+			vel = (monster_fp_controller.translation - loc).normalized()
 			vel = vel.normalized()
 			game.spawn_rocket(loc, vel)
 			
@@ -22,7 +22,7 @@ func attack():
 			$LauncherSound.play()
 	else:
 		loc = $Origin/FirePosition.global_translation
-		vel = (monster.translation - loc).normalized()
+		vel = (monster_fp_controller.translation - loc).normalized()
 		vel *= 40.0
 		game.spawn_bullet(loc, vel)
 		$ShootSound.play()
