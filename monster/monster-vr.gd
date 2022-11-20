@@ -201,6 +201,7 @@ func _on_left_controller_pressed(button):
 func _on_right_controller_pressed(button):
 	if button == roar_button:
 		roar_sound.play()
+		roar = true
 		
 	if button == attack_button:
 		rattack_area.monitorable = true
@@ -232,6 +233,7 @@ func _on_left_controller_released(button):
 		
 	
 func _on_right_controller_released(button):
+			
 	if button == attack_button:
 		rattack_area.monitorable = false
 		rattack_area.monitoring = false
@@ -275,3 +277,6 @@ func _on_TorchTimer_timeout():
 func _on_ThowTimer_timeout():
 	able_to_throw = true
 	
+
+func _on_RoarSound_finished():
+	roar = false

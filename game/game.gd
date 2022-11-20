@@ -60,6 +60,8 @@ func _ready():
 func _process(delta):
 	interface.update_health(monster.health, monster.max_health)
 
+	if monster_fp_controller.global_transform.origin.y >= 50 or monster_fp_controller.global_transform.origin.y <= -10:
+		monster_fp_controller.global_transform.origin = Vector3(-8,10,244)
 
 func score(points):
 	score += points

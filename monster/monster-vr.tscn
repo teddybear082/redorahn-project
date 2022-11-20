@@ -238,7 +238,7 @@ cast_to = Vector3( 0, -7, -15 )
 collision_mask = 432
 
 [node name="InterfaceViewport" parent="FPController/ARVRCamera" index="3" instance=ExtResource( 33 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.15, -3 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, -0.3, -3 )
 screen_size = Vector2( 4, 2 )
 viewport_size = Vector2( 1000, 500 )
 unshaded = true
@@ -596,6 +596,7 @@ one_shot = true
 
 [connection signal="body_entered" from="FPController/ARVRCamera/EatingArea" to="." method="_on_EatingArea_body_entered"]
 [connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]
+[connection signal="finished" from="RoarSound" to="." method="_on_RoarSound_finished"]
 [connection signal="timeout" from="TorchTimer" to="." method="_on_TorchTimer_timeout"]
 [connection signal="timeout" from="ThowTimer" to="." method="_on_ThowTimer_timeout"]
 

@@ -62,7 +62,7 @@ func _process(delta):
 	if state == STATE_DEAD:
 		threshold = 40.0
 	if monster:
-		var distance = global_translation.distance_to(monster_fp_controller.translation)
+		var distance = global_translation.distance_to(monster_fp_controller.global_transform.origin)
 		var trigger_distance = 25.0
 		if monster.roar:
 			trigger_distance = 40.0
@@ -97,10 +97,10 @@ func _physics_process(delta):
 			player.playback_speed = 4.0
 			if not monster:
 				return
-			if translation.distance_to(monster_fp_controller.translation) > 15.0:
-				velocity = (monster_fp_controller.translation - translation).normalized() * 4.0
+			if translation.distance_to(monster_fp_controller.global_transform.origin) > 15.0:
+				velocity = (monster_fp_controller.global_transform.origin - translation).normalized() * 4.0
 				velocity.y = 0.0
-				$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
+				$Origin.look_at(monster_fp_controller.global_transform.origin, Vector3.UP)
 				$Origin.rotation.x = 0.0
 				$Origin.rotation.z = 0.0
 				velocity = move_and_slide(velocity, Vector3.UP)
@@ -111,10 +111,10 @@ func _physics_process(delta):
 		STATE_ATTACK:
 			if not monster:
 				return
-			$Origin.look_at(monster_fp_controller.translation, Vector3.UP)
+			$Origin.look_at(monster_fp_controller.global_transform.origin, Vector3.UP)
 			$Origin.rotation.x = 0.0
 			$Origin.rotation.z = 0.0
-			if translation.distance_to(monster_fp_controller.translation) > 25.0:
+			if translation.distance_to(monster_fp_controller.global_transform.origin) > 25.0:
 				state = STATE_CHASE
 				if level == 0:
 					accessory.visible = false
@@ -153,7 +153,7 @@ func set_scared():
 	state = STATE_SCARED
 	$ScareTimer.wait_time = randi() % 3 + 1
 	$ScareTimer.start()
-	velocity = translation - monster_fp_controller.translation
+	velocity = translation - monster_fp_controller.global_transform.origin
 	velocity = velocity.rotated(Vector3.UP, (randf() - 0.5) * 90.0)
 	velocity = velocity.normalized()
 	velocity *= 8.0
