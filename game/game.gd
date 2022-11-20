@@ -61,8 +61,11 @@ func _ready():
 func _process(delta):
 	interface.update_health(monster.health, monster.max_health)
 
+func _physics_process(delta):
 	if monster_body.transform.origin.y >= 50 or monster_body.transform.origin.y <= -10:
-		monster_body.transform.origin = Vector3(-8,10,244)
+		monster_body.get_node("PlayerBody").velocity = Vector3.ZERO
+		monster_body.global_transform.origin = Vector3(-8,10,244)
+		monster_body.transform.origin = Vector3(-8,10,244)	
 
 func score(points):
 	score += points

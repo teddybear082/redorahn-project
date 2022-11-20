@@ -9,7 +9,7 @@ var velocity = Vector3.ZERO
 func _physics_process(delta):
 	if not monster:
 		return
-	velocity += (monster_fp_controller.translation - translation).normalized() * 0.02
+	velocity += (monster_fp_controller.global_transform.origin - translation).normalized() * 0.02
 	velocity = velocity.normalized()
 	translation += velocity * 15.0 * delta
 	#$Mesh.scale = Vector3(1.0, 1.0, 1.0) * $Timer.time_left / $Timer.wait_time

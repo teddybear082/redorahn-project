@@ -17,7 +17,7 @@ func attack():
 		return
 		
 	var loc = $Origin/TurretMesh/FirePosition.global_translation
-	var vel = monster_fp_controller.translation - loc
+	var vel = monster_fp_controller.global_transform.origin - loc
 	vel = vel.normalized()
 	vel *= 40.0
 	game.spawn_bullet(loc, vel)

@@ -4,7 +4,7 @@ var burst = 6
 
 func _physics_process(delta):
 	if state == STATE_ATTACK:
-		$Origin/LauncherMesh.look_at(monster_fp_controller.translation, Vector3.UP)
+		$Origin/LauncherMesh.look_at(monster_fp_controller.global_transform.origin, Vector3.UP)
 	else:
 		$Origin/LauncherMesh.rotation = Vector3.ZERO
 
@@ -14,7 +14,7 @@ func attack():
 		return
 		
 	var loc = $Origin/LauncherMesh/FirePosition.global_translation
-	var vel = monster_fp_controller.translation - loc
+	var vel = monster_fp_controller.global_transform.origin - loc
 	vel = vel.normalized()
 	game.spawn_rocket(loc, vel)
 	$ShootSound.play()

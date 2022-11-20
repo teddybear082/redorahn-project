@@ -120,7 +120,7 @@ func grab(object):
 	grabbed_object = object
 	able_to_throw = false
 	throw_timer.start()
-	emit_signal("rumble_needed", "right")
+	rumble_needed("right")
 	return true
 
 
@@ -128,7 +128,8 @@ func throw():
 	if grabbed_object:
 		#var vel = Vector3.FORWARD.rotated(Vector3.UP, grabbed_object.get_node("Origin").rotation.y)
 		#var vel = -right_controller.transform.basis.z
-		var vel = -right_controller.transform.basis.z.rotated(Vector3.UP, player_model.rotation.y)
+		#var vel = -right_controller.transform.basis.z.rotated(Vector3.UP, player_model.rotation.y)
+		var vel = -$FPController/ARVRCamera.transform.basis.z
 		vel *= 150.0
 		vel.y = 50.0
 		grabbed_object.throw(grab_area.global_translation, vel)
