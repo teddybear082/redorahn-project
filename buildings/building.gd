@@ -51,6 +51,11 @@ func hit(area):
 	var source = 0
 	if small:
 		source = 1
+	if area.name == "LAttackArea" or area.name == "SmashAttackArea":
+		area.find_parent("Monster").rumble_needed("left")
+	elif area.name == "RAttackArea":
+		area.find_parent("Monster").rumble_needed("right")
+		
 	health -= 1
 	game.score(25)
 	game.spawn_explosion(area.global_translation, source)

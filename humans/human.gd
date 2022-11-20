@@ -1,6 +1,6 @@
 extends KinematicBody
 
-enum {STATE_IDLE, STATE_CHASE, STATE_ATTACK, STATE_SCARED, STATE_GRABBED, STATE_DEAD}
+enum {STATE_IDLE, STATE_CHASE, STATE_ATTACK, STATE_SCARED, STATE_GRABBED, STATE_FLYING, STATE_DEAD}
 
 export var level = 0
 export var attack_animation = "phone-loop"
@@ -140,6 +140,8 @@ func _physics_process(delta):
 		STATE_GRABBED:
 			player.play("grabbed-loop")
 
+		STATE_FLYING:
+			move_and_slide(velocity, Vector3.UP)
 
 func make_vulnerable():
 	$Hitbox.monitoring = true
@@ -236,6 +238,7 @@ func throw(loc, vel):
 		velocity = vel
 		rotation.z = 90.0
 		$CollisionShape.disabled = false
+		state = STATE_FLYING
 		yield(get_tree().create_timer(2.5), "timeout")
 		splat()
 

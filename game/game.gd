@@ -38,7 +38,7 @@ var aliens = false
 
 onready var monster = $Monster
 onready var monster_fp_controller = monster.get_node("FPController/ARVRCamera")
-
+onready var interface = monster.get_node("FPController/ARVRCamera/InterfaceViewport").get_scene_instance()
 
 func _ready():
 	monster.connect("died", self, "monster_died")
@@ -58,12 +58,12 @@ func _ready():
 
 
 func _process(delta):
-	$Interface.update_health(monster.health, monster.max_health)
+	interface.update_health(monster.health, monster.max_health)
 
 
 func score(points):
 	score += points
-	$Interface.update_score(score)
+	interface.update_score(score)
 
 
 func kill(victims = 1):
@@ -92,8 +92,8 @@ func monster_died():
 
 
 func game_over():
-	$Interface.show_score(score, kills)
-	$ScoreCamera.make_current()
+	interface.show_score(score, kills)
+	#$ScoreCamera.make_current()
 	game_over = true
 
 

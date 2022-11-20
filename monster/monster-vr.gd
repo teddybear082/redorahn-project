@@ -4,6 +4,7 @@ enum {STATE_IDLE, STATE_ATTACK_LEFT, STATE_ATTACK_RIGHT,
   STATE_ATTACK_SMASH, STATE_GRAB, STATE_ROAR, STATE_EAT, STATE_THROW, STATE_DEAD}
 
 signal died
+signal rumble_needed(side_string)
 
 export var locked = false
 export var roar = false
@@ -11,6 +12,7 @@ export (XRTools.Buttons) var roar_button : int = XRTools.Buttons.VR_BUTTON_BY
 export (XRTools.Buttons) var grab_button : int = XRTools.Buttons.VR_GRIP
 export (XRTools.Buttons) var fire_button : int = XRTools.Buttons.VR_BUTTON_BY
 export (XRTools.Buttons) var attack_button : int = XRTools.Buttons.VR_TRIGGER
+export (XRTools.Buttons) var HUD_button : int = XRTools.Buttons.VR_BUTTON_AX
 
 var max_health = 1000
 var health = max_health
@@ -75,139 +77,12 @@ func _physics_process(delta):
 			var collider = fire_raycast.get_collider()
 			var fire_instance = fire.instance()
 			fire_instance.scale_amount = 3
-			#fire_instance.global_transform.origin = fire_raycast.get_collision_point()
 			collider.add_child(fire_instance)
 			able_to_torch = false
 			torch_timer.start()
 			if collider.is_in_group("humans"):
 				collider.splat()
-#	# Camera update
-#	var camera_speed = 3.0
-#	$CameraPivot.rotation_degrees.x -= Input.get_action_strength("camera_down") * camera_speed
-#	$CameraPivot.rotation_degrees.x += Input.get_action_strength("camera_up") * camera_speed
-#	$CameraPivot.rotation_degrees.y -= Input.get_action_strength("camera_right") * camera_speed
-#	$CameraPivot.rotation_degrees.y += Input.get_action_strength("camera_left") * camera_speed
-#	$CameraPivot.rotation_degrees.x = clamp($CameraPivot.rotation_degrees.x, -75.0, 25.0)
-#
-#	var target = Vector3.BACK.rotated(Vector3.UP, $CameraPivot.rotation.y) * 3.0
-#	target += Vector3.FORWARD.rotated(Vector3.UP, $Origin.rotation.y) * 5.0
-#
-#	var vel = (target - $CameraPivot.translation) * 0.025
-#	$CameraPivot.translation += vel
-#	$CameraPivot.translation.y = 2.5
-#
-#	var time = $ShakeTimer.time_left
-#	time = clamp(time, 0.0, 1.0)
-#	time *= 0.25
-#	$CameraPivot/Camera.translation = Vector3(randf() * time, randf() * time, camera_distance + randf() * time)
-#
-#	# Monster update
-#	var velocity = Vector3.ZERO
-#	velocity.y = -10
-#	var direction = Vector3.ZERO
-#
-#	if state != STATE_GRAB:
-#		grab_area.monitorable = false
-#
-#	if state != STATE_ROAR:
-#		roar = false
-#
-#	match state:
-#		STATE_IDLE:
-#			player.playback_speed = 1.3
-#			"""
-#			direction.z += Input.get_axis("move_forward", "move_back")
-#			direction.x += Input.get_axis("move_left", "move_right")
-#			"""
-#			direction.z -= Input.get_action_strength("move_forward")
-#			direction.z += Input.get_action_strength("move_back")
-#			direction.x -= Input.get_action_strength("move_left")
-#			direction.x += Input.get_action_strength("move_right")
-#
-#			if direction != Vector3.ZERO:
-#				player.play("walk-loop")
-##				direction = direction.normalized()
-##				direction = direction.rotated(Vector3.UP, $CameraPivot.rotation.y)
-##				$Origin.look_at(translation + direction, Vector3.UP)
-##				velocity += direction * speed
-#			else:
-#				player.play("idle-loop")
-#
-#
-#			if Input.is_action_just_pressed("attack"):
-#				set_state(STATE_ATTACK_LEFT, "attack-left")
-#			elif Input.is_action_just_pressed("smash"):
-#				set_state(STATE_ATTACK_SMASH, "smash")
-#			elif Input.is_action_just_pressed("grab"):
-#				if not perform_grab_action():
-#					set_state(STATE_GRAB, "grab")
-#			elif Input.is_action_just_pressed("roar"):
-#				set_state(STATE_ROAR, "roar")
-#
-#		STATE_ATTACK_LEFT:
-#			player.playback_speed = 2.4
-#			if Input.is_action_just_pressed("attack") and not locked:
-#				set_state(STATE_ATTACK_RIGHT, "attack-right")
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_ATTACK_RIGHT:
-#			player.playback_speed = 2.4
-#			if Input.is_action_just_pressed("attack") and not locked:
-#				set_state(STATE_ATTACK_LEFT, "attack-left")
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_ATTACK_SMASH:
-#			player.playback_speed = 2.4
-#			if Input.is_action_just_pressed("smash") and not locked:
-#				player.stop()
-#				set_state(STATE_ATTACK_SMASH, "smash")
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_GRAB:
-#			player.playback_speed = 1.0
-#			if Input.is_action_just_pressed("grab") and not locked:
-#				perform_grab_action()
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_ROAR:
-#			player.playback_speed = 1.25
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_EAT:
-#			player.playback_speed = 2.0
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_THROW:
-#			player.playback_speed = 1.5
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#		STATE_DEAD:
-#			player.playback_speed = 1.0
-#
-#		_:
-#			if not player.is_playing():
-#				set_state(STATE_IDLE)
-#
-#	move_and_slide(velocity)
-
-
-func perform_grab_action():
-	if grabbed_object:
-		if grabbed_object.is_in_group("humans"):
-			set_state(STATE_EAT, "eat")
-		else:
-			set_state(STATE_THROW, "throw")
-		return true
-	else:
-		return false
-
+#	
 
 func set_state(new_state, anim = null):
 	if new_state == STATE_DEAD and state != STATE_DEAD:
@@ -233,13 +108,14 @@ func grab(object):
 		object.get_node("Hitbox").set_deferred("monitoring", false)
 	if object.is_in_group("vehicles"):
 		object.state = object.STATE_GRABBED
-		object.transform.origin = Vector3.ZERO
+		#object.transform.origin = Vector3.ZERO
 		object.get_node("CollisionShape").disabled = true
 		object.get_node("Origin").rotation = Vector3.ZERO
 		object.get_node("AttackTimer").stop()
 		object.get_node("DropTimer").stop()
 		object.get_node("Hitbox").set_deferred("monitoring", false)
 	grabbed_object = object
+	emit_signal("rumble_needed", "right")
 	return true
 
 
@@ -298,6 +174,8 @@ func _on_left_controller_pressed(button):
 		$FPController/ARVRCamera/FireParticles.visible = true
 		fire_sound.play()
 		fire_raycast.enabled = true
+		left_controller.set_rumble(0.1)
+		right_controller.set_rumble(0.1)
 	
 	if button == attack_button:
 		lattack_area.monitorable = true
@@ -326,6 +204,8 @@ func _on_left_controller_released(button):
 	if button == fire_button:
 		fire_raycast.enabled = false
 		$FPController/ARVRCamera/FireParticles.visible = false
+		left_controller.set_rumble(0.0)
+		right_controller.set_rumble(0.0)
 		fire_sound.stop()
 		
 	if button == attack_button:
@@ -345,7 +225,21 @@ func _on_right_controller_released(button):
 	if button == grab_button:
 		if grabbed_object:
 			throw()
-			
+
+func rumble_needed(side: String):
+	if side == "left":
+		left_controller.set_rumble(.3)
+		yield(get_tree().create_timer(.3), "timeout")
+		left_controller.set_rumble(0.0)		
+	
+	if side == "right":
+		right_controller.set_rumble(.3)
+		yield(get_tree().create_timer(.3), "timeout")
+		right_controller.set_rumble(0.0)
+	
+	else:
+		print("Wrong string for rumble_needed function")
+		return	
 			
 func _play_step_sound():
 	step_sound.play()
@@ -353,9 +247,11 @@ func _play_step_sound():
 
 func _on_EatingArea_body_entered(body):
 	if body.is_in_group("humans"):
-		grabbed_object=null
+		eat()
 		eat_sound.play()
-		body.queue_free()
+		rumble_needed("right")
+		grabbed_object=null
+		
 
 
 func _on_TorchTimer_timeout():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -31,6 +31,8 @@
 [ext_resource path="res://effects/textures/smoke_alpha.png" type="Texture" id=29]
 [ext_resource path="res://sounds/building_collapse.wav" type="AudioStream" id=30]
 [ext_resource path="res://addons/godot-xr-tools/functions/movement_sprint.tscn" type="PackedScene" id=31]
+[ext_resource path="res://interface/interface.tscn" type="PackedScene" id=32]
+[ext_resource path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" type="PackedScene" id=33]
 
 [sub_resource type="SpatialMaterial" id=9]
 flags_transparent = true
@@ -234,6 +236,14 @@ shape = SubResource( 14 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, -1 )
 cast_to = Vector3( 0, -7, -15 )
 collision_mask = 432
+
+[node name="InterfaceViewport" parent="FPController/ARVRCamera" index="3" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3 )
+screen_size = Vector2( 4, 2 )
+viewport_size = Vector2( 1000, 500 )
+unshaded = true
+scene = ExtResource( 32 )
+update_mode = 2
 
 [node name="LeftPhysicsHand" parent="FPController/LeftHandController" index="0" instance=ExtResource( 14 )]
 
@@ -489,7 +499,7 @@ monitorable = false
 shape = SubResource( 6 )
 
 [node name="GrabRayCast" type="RayCast" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
-transform = Transform( -0.00404078, -0.996119, 0.0879157, 0.994201, 0.00544739, 0.107407, -0.107467, 0.0878403, 0.990321, 2.38419e-07, -1.19209e-07, 0 )
+transform = Transform( 0.261788, -48.0594, 4.35501, 0.959776, 13.4382, 4.06088, -0.101475, 3.11674, 49.6442, 2.38419e-07, -1.19209e-07, 0 )
 enabled = true
 cast_to = Vector3( 10, 0, 0 )
 collision_mask = 384
