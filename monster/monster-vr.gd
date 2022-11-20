@@ -22,6 +22,7 @@ var state = STATE_IDLE
 var grabbed_object = null
 var fire = preload("res://effects/fire.tscn")
 var able_to_torch: bool = true
+var able_to_throw : bool = true
 
 onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
 onready var grab_raycast = grab_area.get_node("GrabRayCast")
@@ -41,7 +42,9 @@ onready var fire_sound = $FireSound
 onready var eat_sound = $EatSound
 onready var fire_raycast = $FPController/ARVRCamera/FireRayCast
 onready var torch_timer = $TorchTimer
-
+onready var throw_timer = $ThowTimer
+onready var HUD_interface_viewport = $FPController/ARVRCamera/InterfaceViewport
+onready var HUD_interface = HUD_interface_viewport.get_scene_instance()
 
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -115,13 +118,17 @@ func grab(object):
 		object.get_node("DropTimer").stop()
 		object.get_node("Hitbox").set_deferred("monitoring", false)
 	grabbed_object = object
+	able_to_throw = false
+	throw_timer.start()
 	emit_signal("rumble_needed", "right")
 	return true
 
 
 func throw():
 	if grabbed_object:
-		var vel = Vector3.FORWARD.rotated(Vector3.UP, grabbed_object.get_node("Origin").rotation.y)
+		#var vel = Vector3.FORWARD.rotated(Vector3.UP, grabbed_object.get_node("Origin").rotation.y)
+		#var vel = -right_controller.transform.basis.z
+		var vel = -right_controller.transform.basis.z.rotated(Vector3.UP, player_model.rotation.y)
 		vel *= 150.0
 		vel.y = 50.0
 		grabbed_object.throw(grab_area.global_translation, vel)
@@ -180,10 +187,15 @@ func _on_left_controller_pressed(button):
 	if button == attack_button:
 		lattack_area.monitorable = true
 		lattack_area.monitoring = true
+		if HUD_interface.score_screen == true:
+			HUD_interface.get_node("RestartTimer").start()
 		
 	if button == grab_button:
 		lsmash_area.monitorable = true
 		lsmash_area.monitoring = true
+		
+	if button == HUD_button:
+		HUD_interface_viewport.visible = !HUD_interface_viewport.visible
 		
 		
 func _on_right_controller_pressed(button):
@@ -193,6 +205,8 @@ func _on_right_controller_pressed(button):
 	if button == attack_button:
 		rattack_area.monitorable = true
 		rattack_area.monitoring = true
+		if HUD_interface.score_screen == true:
+			HUD_interface.get_node("RestartTimer").start()
 		
 	if button == grab_button:
 		if grab_raycast:
@@ -223,7 +237,7 @@ func _on_right_controller_released(button):
 		rattack_area.monitoring = false
 		
 	if button == grab_button:
-		if grabbed_object:
+		if grabbed_object and able_to_throw:
 			throw()
 
 func rumble_needed(side: String):
@@ -256,3 +270,8 @@ func _on_EatingArea_body_entered(body):
 
 func _on_TorchTimer_timeout():
 	able_to_torch = true
+
+
+func _on_ThowTimer_timeout():
+	able_to_throw = true
+	

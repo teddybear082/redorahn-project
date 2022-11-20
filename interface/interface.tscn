@@ -65,23 +65,23 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="ScoreCounter" type="Label" parent="ScoreScreen/Container"]
-margin_top = 462.0
+margin_top = 482.0
 margin_right = 1920.0
-margin_bottom = 498.0
+margin_bottom = 518.0
 text = "SCORE:0"
 align = 1
 
 [node name="KillCounter" type="Label" parent="ScoreScreen/Container"]
-margin_top = 502.0
+margin_top = 522.0
 margin_right = 1920.0
-margin_bottom = 538.0
+margin_bottom = 558.0
 text = "KILLS:0"
 align = 1
 
 [node name="HighScoreCounter" type="Label" parent="ScoreScreen/Container"]
-margin_top = 542.0
+margin_top = 562.0
 margin_right = 1920.0
-margin_bottom = 578.0
+margin_bottom = 598.0
 text = "HIGHSCORE: 150000"
 align = 1
 
@@ -104,7 +104,7 @@ margin_top = -18.0
 margin_right = 202.0
 margin_bottom = 18.0
 theme = ExtResource( 6 )
-text = "Press any key to try again"
+text = "Press trigger to try again"
 align = 1
 
 [node name="PauseLabel" type="Label" parent="."]

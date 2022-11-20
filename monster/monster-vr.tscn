@@ -238,12 +238,13 @@ cast_to = Vector3( 0, -7, -15 )
 collision_mask = 432
 
 [node name="InterfaceViewport" parent="FPController/ARVRCamera" index="3" instance=ExtResource( 33 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.15, -3 )
 screen_size = Vector2( 4, 2 )
 viewport_size = Vector2( 1000, 500 )
 unshaded = true
 scene = ExtResource( 32 )
 update_mode = 2
+collision_layer = 0
 
 [node name="LeftPhysicsHand" parent="FPController/LeftHandController" index="0" instance=ExtResource( 14 )]
 
@@ -499,7 +500,7 @@ monitorable = false
 shape = SubResource( 6 )
 
 [node name="GrabRayCast" type="RayCast" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
-transform = Transform( 0.261788, -48.0594, 4.35501, 0.959776, 13.4382, 4.06088, -0.101475, 3.11674, 49.6442, 2.38419e-07, -1.19209e-07, 0 )
+transform = Transform( 0.19438, -48.8487, 4.39936, 0.975433, 10.0996, 4.39632, -0.103675, 3.43672, 49.6117, 2.38419e-07, -1.19209e-07, 0 )
 enabled = true
 cast_to = Vector3( 10, 0, 0 )
 collision_mask = 384
@@ -589,8 +590,13 @@ bus = "SFX"
 [node name="TorchTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="ThowTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="body_entered" from="FPController/ARVRCamera/EatingArea" to="." method="_on_EatingArea_body_entered"]
 [connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]
 [connection signal="timeout" from="TorchTimer" to="." method="_on_TorchTimer_timeout"]
+[connection signal="timeout" from="ThowTimer" to="." method="_on_ThowTimer_timeout"]
 
 [editable path="FPController"]
