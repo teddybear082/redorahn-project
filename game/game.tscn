@@ -4519,3 +4519,4 @@ stream = ExtResource( 40 )
 [connection signal="timeout" from="HumanSpawnTimer" to="." method="generate_human"]
 [connection signal="timeout" from="VehicleSpawnTimer" to="." method="generate_vehicle"]
 [connection signal="timeout" from="GameOverTimer" to="." method="game_over"]
+[connection signal="finished" from="Music" to="." method="_on_Music_finished"]

@@ -14,6 +14,9 @@ bones/22/bound_children = [  ]
 [node name="Human" parent="Origin/HumanArmature/Skeleton" index="0"]
 mesh = ExtResource( 2 )
 
+[node name="HandAnchor" parent="Origin/HumanArmature/Skeleton" index="1"]
+transform = Transform( -0.997817, -0.0660321, -8.90919e-06, 0.0660321, -0.997817, 5.69495e-07, -8.9407e-06, 0, 1, -0.17611, -0.108159, -1.62327e-07 )
+
 [node name="Accessory" parent="Origin/HumanArmature/Skeleton/HandAnchor" index="0"]
 mesh = ExtResource( 3 )
 

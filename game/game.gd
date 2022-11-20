@@ -38,6 +38,7 @@ var aliens = false
 
 onready var monster = $Monster
 onready var monster_fp_controller = monster.get_node("FPController/ARVRCamera")
+onready var monster_body = monster.get_node("FPController")
 onready var interface = monster.get_node("FPController/ARVRCamera/InterfaceViewport").get_scene_instance()
 
 func _ready():
@@ -60,8 +61,8 @@ func _ready():
 func _process(delta):
 	interface.update_health(monster.health, monster.max_health)
 
-	if monster_fp_controller.global_transform.origin.y >= 50 or monster_fp_controller.global_transform.origin.y <= -10:
-		monster_fp_controller.global_transform.origin = Vector3(-8,10,244)
+	if monster_body.transform.origin.y >= 50 or monster_body.transform.origin.y <= -10:
+		monster_body.transform.origin = Vector3(-8,10,244)
 
 func score(points):
 	score += points
@@ -329,3 +330,7 @@ func spawn_plasma(location, velocity):
 	plasma.translation = location
 	plasma.velocity = velocity
 	add_child(plasma)
+
+
+func _on_Music_finished():
+	$Music.play()
