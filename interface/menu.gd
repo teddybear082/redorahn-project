@@ -42,8 +42,9 @@ func game_start_sequence():
 	press_start_icon.visible = false
 	press_timer.stop()
 	music.stop()
-	yield(get_tree().create_timer(.3), "timeout")
+	yield(get_tree().create_timer(.5), "timeout")
 	scene_holder.visible = false
+
 
 func _on_LoadingScreen_continue_pressed():
 	loading_screen.follow_camera = false
@@ -63,21 +64,25 @@ func _on_LoadingScreen_continue_pressed():
 	lava.visible = true
 	egg.visible = true
 
-func _on_LeftHand_button_pressed(_button):
+
+func _on_LeftHand_button_pressed(button):
 	if animation_player.is_playing():
 		return
 	
 	if ok_to_press_play == false:
 		return
 		
-	game_start_sequence()
+	if button == XRTools.Buttons.VR_BUTTON_AX or button == XRTools.Buttons.VR_BUTTON_BY or button == XRTools.Buttons.VR_TRIGGER:
+		game_start_sequence()
 	
-func _on_RightHand_button_pressed(_button):
+	
+func _on_RightHand_button_pressed(button):
 	if animation_player.is_playing():
 		return
 	
 	if ok_to_press_play == false:
 		return
 		
-	game_start_sequence()
+	if button == XRTools.Buttons.VR_BUTTON_AX or button == XRTools.Buttons.VR_BUTTON_BY or button == XRTools.Buttons.VR_TRIGGER:
+			game_start_sequence()
 	
