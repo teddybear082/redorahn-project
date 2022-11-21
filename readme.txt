@@ -1,8 +1,8 @@
 ===== FULL PROJECT RELEASE =====
 
 This is the full REDORAHN Godot project.
-Feel free to play with / reuse the GDScript source code as you see fit.
-The graphical resources and musics are provided so the project can be run properly, but must not be used outside of this game's scope.
+The GDScript source files are provided under the GPL 3.0 license, as describe in license_gpl.txt.
+The graphical resources and musics are provided under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license (CC BY-NC-SA 4.0), as described in license_creativecommons-by-nc-sa.txt.
 The sound effects come from freesound.org as described in freesound.txt.
 
 Thank you!
