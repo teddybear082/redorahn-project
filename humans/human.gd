@@ -239,7 +239,7 @@ func throw(loc, vel):
 		rotation.z = 90.0
 		$CollisionShape.disabled = false
 		state = STATE_FLYING
-		yield(get_tree().create_timer(2.5), "timeout")
+		yield(get_tree().create_timer(1), "timeout")
 		splat()
 
 func eat():

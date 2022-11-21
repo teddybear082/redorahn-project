@@ -25,7 +25,7 @@ var able_to_torch: bool = true
 var able_to_throw : bool = true
 
 onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
-onready var grab_raycast = grab_area.get_node("GrabRayCast")
+onready var grab_target : Area = grab_area.get_node("GrabTargetArea")
 onready var lstomp_area = $FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea
 onready var rstomp_area = $FPController/monster/Armature/Skeleton/RightFootAnchor/RStompArea
 onready var lattack_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea
@@ -45,6 +45,8 @@ onready var torch_timer = $TorchTimer
 onready var throw_timer = $ThowTimer
 onready var HUD_interface_viewport = $FPController/ARVRCamera/InterfaceViewport
 onready var HUD_interface = HUD_interface_viewport.get_scene_instance()
+onready var throw_target = $FPController/ARVRCamera/ThrowTarget
+
 
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -65,13 +67,6 @@ func _ready():
 	
 	# Connect procedural step signals
 	player_model.connect("avatar_procedural_step_taken", self, "_play_step_sound")
-	
-#func _unhandled_input(event):
-#	if event is InputEventMouseMotion:
-#		var mouse_motion = event.relative * 0.1
-#		$CameraPivot.rotation_degrees.x -= mouse_motion.y
-#		$CameraPivot.rotation_degrees.y -= mouse_motion.x
-#		$CameraPivot.rotation_degrees.x = clamp($CameraPivot.rotation_degrees.x, -75.0, 25.0)
 
 
 func _physics_process(delta):
@@ -85,7 +80,7 @@ func _physics_process(delta):
 			torch_timer.start()
 			if collider.is_in_group("humans"):
 				collider.splat()
-#	
+
 
 func set_state(new_state, anim = null):
 	if new_state == STATE_DEAD and state != STATE_DEAD:
@@ -126,13 +121,9 @@ func grab(object):
 
 func throw():
 	if grabbed_object:
-		#var vel = Vector3.FORWARD.rotated(Vector3.UP, grabbed_object.get_node("Origin").rotation.y)
-		#var vel = -right_controller.transform.basis.z
-		#var vel = -right_controller.transform.basis.z.rotated(Vector3.UP, player_model.rotation.y)
-		var vel = -$FPController/ARVRCamera.transform.basis.z
-		vel *= 150.0
-		vel.y = 50.0
-		grabbed_object.throw(grab_area.global_translation, vel)
+		var vel = (throw_target.global_transform.origin - grab_area.global_transform.origin).normalized() * 75.0
+		vel.y = 100.0
+		grabbed_object.throw(grab_area.global_transform.origin, vel)
 		grabbed_object = null
 
 
@@ -211,10 +202,9 @@ func _on_right_controller_pressed(button):
 			HUD_interface.get_node("RestartTimer").start()
 		
 	if button == grab_button:
-		if grab_raycast:
-			if grab_raycast.is_colliding():
-				grab(grab_raycast.get_collider())
-	
+		grab_target.monitoring = true
+		grab_target.monitorable = true
+			
 			
 func _on_left_controller_released(button):
 	if button == fire_button:
@@ -240,6 +230,8 @@ func _on_right_controller_released(button):
 		rattack_area.monitoring = false
 		
 	if button == grab_button:
+		grab_target.monitorable = false
+		grab_target.monitoring = false
 		if grabbed_object and able_to_throw:
 			throw()
 
@@ -254,9 +246,6 @@ func rumble_needed(side: String):
 		yield(get_tree().create_timer(.3), "timeout")
 		right_controller.set_rumble(0.0)
 	
-	else:
-		print("Wrong string for rumble_needed function")
-		return	
 			
 func _play_step_sound():
 	step_sound.play()

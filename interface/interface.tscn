@@ -53,6 +53,20 @@ theme = ExtResource( 2 )
 text = "SCORE  0"
 align = 2
 
+[node name="ControlsLabel" type="Label" parent="HUD"]
+margin_top = 49.0
+margin_right = 40.0
+margin_bottom = 36.0
+text = "Controls:
+Y: Fire Breath
+X: HUD Toggle
+B: Roar
+A: Jump
+Triggers: Hit
+L Grip: Smash Ground
+R Grip: Grab / Throw
+Click L Stick: Sprint Toggle"
+
 [node name="ScoreScreen" type="Control" parent="."]
 visible = false
 anchor_right = 1.0

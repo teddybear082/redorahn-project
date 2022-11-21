@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -195,6 +195,10 @@ radius = 8.0
 [sub_resource type="SphereShape" id=6]
 radius = 3.0
 
+[sub_resource type="CapsuleShape" id=15]
+radius = 1.5
+height = 7.0
+
 [sub_resource type="SphereShape" id=7]
 radius = 2.0
 
@@ -245,6 +249,9 @@ unshaded = true
 scene = ExtResource( 32 )
 update_mode = 2
 collision_layer = 0
+
+[node name="ThrowTarget" type="Spatial" parent="FPController/ARVRCamera" index="4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10 )
 
 [node name="LeftPhysicsHand" parent="FPController/LeftHandController" index="0" instance=ExtResource( 14 )]
 
@@ -386,7 +393,7 @@ bones/18/name = "foot_l"
 bones/18/parent = 17
 bones/18/rest = Transform( 1, 6.39612e-08, 4.68098e-07, -6.39612e-08, -0.963343, 0.268273, 4.68098e-07, -0.268273, -0.963343, -5.05033e-08, 0, -4.76837e-08 )
 bones/18/enabled = true
-bones/18/bound_children = [ NodePath("LeftFootAnchor") ]
+bones/18/bound_children = [  ]
 bones/19/name = "knee_l"
 bones/19/parent = -1
 bones/19/rest = Transform( 1, 0, 1.50996e-07, 1.50996e-07, 0, -1, 0, 1, 0, 1.8, -4.41158, 4.97153 )
@@ -406,7 +413,7 @@ bones/22/name = "fingers_l"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.300508, -0.935816, -0.184236, 0.939744, 0.257494, 0.224895, -0.163021, -0.240718, 0.956807, -2.98023e-07, 1.12912, -1.19209e-07 )
 bones/22/enabled = true
-bones/22/bound_children = [ NodePath("LeftHandAnchor") ]
+bones/22/bound_children = [  ]
 bones/23/name = "elbow_l"
 bones/23/parent = -1
 bones/23/rest = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, 2.3, 0, -10 )
@@ -421,7 +428,7 @@ bones/25/name = "foot_r"
 bones/25/parent = 24
 bones/25/rest = Transform( 1, -6.39612e-08, -4.68098e-07, 6.39612e-08, -0.963343, 0.268273, -4.68098e-07, -0.268273, -0.963343, 5.05033e-08, 0, -4.76837e-08 )
 bones/25/enabled = true
-bones/25/bound_children = [ NodePath("RightFootAnchor") ]
+bones/25/bound_children = [  ]
 bones/26/name = "knee_r"
 bones/26/parent = -1
 bones/26/rest = Transform( 1, 0, -1.50996e-07, -1.50996e-07, 0, -1, 0, 1, 0, -1.8, -4.41158, 4.97153 )
@@ -441,7 +448,7 @@ bones/29/name = "fingers_r"
 bones/29/parent = 28
 bones/29/rest = Transform( 0.300508, 0.935816, 0.184236, -0.939744, 0.257494, 0.224895, 0.163021, -0.240718, 0.956807, 2.98023e-07, 1.12912, -1.19209e-07 )
 bones/29/enabled = true
-bones/29/bound_children = [ NodePath("RightHandAnchor") ]
+bones/29/bound_children = [  ]
 bones/30/name = "elbow_r"
 bones/30/parent = -1
 bones/30/rest = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, -2.3, 0, -10 )
@@ -457,6 +464,7 @@ transform = Transform( 0.615399, -0.78501, 0.0710124, -0.00978236, -0.0976926, -
 bone_name = "fingers_l"
 
 [node name="LAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor"]
+visible = false
 collision_layer = 2
 collision_mask = 0
 monitoring = false
@@ -481,6 +489,7 @@ transform = Transform( 0.615399, 0.78501, -0.0710124, 0.00978236, -0.0976926, -0
 bone_name = "fingers_r"
 
 [node name="RAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/RightHandAnchor"]
+visible = false
 collision_layer = 2
 collision_mask = 0
 monitoring = false
@@ -499,11 +508,16 @@ monitorable = false
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
 shape = SubResource( 6 )
 
-[node name="GrabRayCast" type="RayCast" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
-transform = Transform( 0.19438, -48.8487, 4.39936, 0.975433, 10.0996, 4.39632, -0.103675, 3.43672, 49.6117, 2.38419e-07, -1.19209e-07, 0 )
-enabled = true
-cast_to = Vector3( 10, 0, 0 )
-collision_mask = 384
+[node name="GrabTargetArea" type="Area" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea"]
+transform = Transform( 0.800601, -0.547081, -0.24442, -0.123495, 0.248504, -0.960728, 0.586334, 0.799343, 0.131391, 1.32146, 4.07548, -0.387087 )
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea/GrabTargetArea"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+shape = SubResource( 15 )
 
 [node name="LeftFootAnchor" type="BoneAttachment" parent="FPController/monster/Armature/Skeleton"]
 transform = Transform( 1, -1.77636e-13, 2.38419e-07, 2.29679e-07, -0.268273, -0.963343, 6.39612e-08, 0.963343, -0.268273, 1.8, -6.28817, -2.23979 )

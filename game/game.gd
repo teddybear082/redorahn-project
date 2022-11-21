@@ -57,6 +57,8 @@ func _ready():
 		n.occupants = 0
 		n.remove_from_group("vehicles")
 
+	yield(get_tree().create_timer(20),"timeout")
+	interface.get_node("HUD/ControlsLabel").visible = false
 
 func _process(delta):
 	interface.update_health(monster.health, monster.max_health)
@@ -64,8 +66,7 @@ func _process(delta):
 func _physics_process(delta):
 	if monster_body.transform.origin.y >= 50 or monster_body.transform.origin.y <= -10:
 		monster_body.get_node("PlayerBody").velocity = Vector3.ZERO
-		monster_body.global_transform.origin = Vector3(-8,10,244)
-		monster_body.transform.origin = Vector3(-8,10,244)	
+		monster_body.transform.origin = Vector3.ZERO	
 
 func score(points):
 	score += points
