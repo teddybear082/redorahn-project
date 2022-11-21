@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.s3tc.stex"
 path.etc2="res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.etc2.stex"
+path.etc="res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-tools/hands/textures/african_baseColor.png"
-dest_files=[ "res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.s3tc.stex", "res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.etc2.stex" ]
+dest_files=[ "res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.s3tc.stex", "res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.etc2.stex", "res://.import/african_baseColor.png-c1a63b2c85973a5f7673482d994697e9.etc.stex" ]
 
 [params]
 

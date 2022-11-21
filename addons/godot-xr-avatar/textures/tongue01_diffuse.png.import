@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.s3tc.stex"
 path.etc2="res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.etc2.stex"
+path.etc="res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-avatar/textures/tongue01_diffuse.png"
-dest_files=[ "res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.s3tc.stex", "res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.etc2.stex" ]
+dest_files=[ "res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.s3tc.stex", "res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.etc2.stex", "res://.import/tongue01_diffuse.png-fd5c0c30dd6c126f73a1e8dcf0dde542.etc.stex" ]
 
 [params]
 

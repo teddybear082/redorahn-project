@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.s3tc.stex"
 path.etc2="res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.etc2.stex"
+path.etc="res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-avatar/textures/Hands_Caucasian.png"
-dest_files=[ "res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.s3tc.stex", "res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.etc2.stex" ]
+dest_files=[ "res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.s3tc.stex", "res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.etc2.stex", "res://.import/Hands_Caucasian.png-68b43a94e39ae04d0cf99f2e094de09b.etc.stex" ]
 
 [params]
 

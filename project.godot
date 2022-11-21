@@ -1580,6 +1580,7 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
 quality/shading/force_vertex_shading=true
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"

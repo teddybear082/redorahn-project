@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.s3tc.stex"
 path.etc2="res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.etc2.stex"
+path.etc="res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-avatar/textures/avatar_AlbedoTransparency.png"
-dest_files=[ "res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.s3tc.stex", "res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.etc2.stex" ]
+dest_files=[ "res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.s3tc.stex", "res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.etc2.stex", "res://.import/avatar_AlbedoTransparency.png-4b851b47fe25c78dd2a7b864fa27a57d.etc.stex" ]
 
 [params]
 

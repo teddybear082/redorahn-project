@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.s3tc.stex"
 path.etc2="res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.etc2.stex"
+path.etc="res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-avatar/textures/avatar_Normal.png"
-dest_files=[ "res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.s3tc.stex", "res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.etc2.stex" ]
+dest_files=[ "res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.s3tc.stex", "res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.etc2.stex", "res://.import/avatar_Normal.png-37db011472b7869cae0dbd1ba767cd52.etc.stex" ]
 
 [params]
 

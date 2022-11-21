@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.s3tc.stex"
 path.etc2="res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.etc2.stex"
+path.etc="res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/godot-xr-tools/hands/textures/hands_normal.png"
-dest_files=[ "res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.s3tc.stex", "res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.etc2.stex" ]
+dest_files=[ "res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.s3tc.stex", "res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.etc2.stex", "res://.import/hands_normal.png-291c7217751274bfe1199e3de899450f.etc.stex" ]
 
 [params]
 
