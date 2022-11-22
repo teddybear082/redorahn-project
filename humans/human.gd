@@ -20,6 +20,7 @@ var path_direction = 1.0
 var woman = false
 var state = STATE_IDLE
 var velocity = Vector3.ZERO
+var random = RandomNumberGenerator.new()
 
 onready var mesh = $Origin/HumanArmature/Skeleton/Human
 onready var accessory = $Origin/HumanArmature/Skeleton/HandAnchor/Accessory
@@ -30,20 +31,20 @@ onready var player = $Origin/AnimationPlayer
 func _ready():
 	if not monster:
 		remove()
-	
+	random.randomize()
 	translation.y = 0.7
-	if randi() % 100 < 50:
+	if random.randi() % 100 < 50:
 		path_direction = -1.0
 	if state == STATE_SCARED:
 		set_scared()
 	match level:
 		0:
-			if randi() % 100 < 50:
+			if random.randi() % 100 < 50:
 				woman = true
 				mesh.mesh = woman_mesh
 			var mat = mesh.mesh.surface_get_material(0).duplicate()
 			var offset = 0.0
-			offset = randi() % 8
+			offset = random.randi() % 8
 			offset /= 8.0
 			mat.uv1_offset.x = offset
 			mesh.set_surface_material(0, mat)
@@ -67,7 +68,7 @@ func _process(delta):
 		if monster.roar:
 			trigger_distance = 40.0
 		if distance <= trigger_distance and state == STATE_IDLE:
-			if level > 0 or randi() % 100 < 50:
+			if level > 0 or random.randi() % 100 < 50:
 				state = STATE_CHASE
 			else:
 				set_scared()
@@ -125,7 +126,7 @@ func _physics_process(delta):
 				scare_luck = 35
 			elif level == 2:
 				scare_luck = 20
-			if monster.roar and randi() % 100 < scare_luck:
+			if monster.roar and random.randi() % 100 < scare_luck:
 				set_scared()
 			
 		STATE_SCARED:
@@ -139,6 +140,7 @@ func _physics_process(delta):
 		
 		STATE_GRABBED:
 			player.play("grabbed-loop")
+			
 
 		STATE_FLYING:
 			move_and_slide(velocity, Vector3.UP)
@@ -160,8 +162,8 @@ func set_scared():
 	var scream_array = man_screams
 	if woman:
 		scream_array = woman_screams
-	if randi() % 100 < 10 and scream_array.size():
-		$ScreamSound.stream = scream_array[randi() % scream_array.size()]
+	if random.randi() % 100 < 10 and scream_array.size():
+		$ScreamSound.stream = scream_array[random.randi() % scream_array.size()]
 		$ScreamSound.play()
 
 

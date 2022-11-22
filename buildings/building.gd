@@ -1,4 +1,5 @@
-extends StaticBody
+tool
+extends XRToolsClimbable
 
 signal shake_screen
 
@@ -13,19 +14,20 @@ var fire_scene = preload("res://effects/fire.tscn")
 
 var game = null
 var destroy = false
-
+var random = RandomNumberGenerator.new()
 
 func _ready():
-	$Origin/MeshDestroyed.rotation_degrees.y = randi() % 360
-	$Origin/MeshDestroyed.scale.y += (randf() - 0.5) * 0.5
+	random.randomize()
+	$Origin/MeshDestroyed.rotation_degrees.y = random.randi() % 360
+	$Origin/MeshDestroyed.scale.y += (random.randf() - 0.5) * 0.5
 	if small:
 		$Hitbox.set_collision_mask_bit(2, true)
 
 
 func _process(delta):
 	if not $HitTimer.is_stopped():
-		$Origin/Mesh.translation.x = randf() - 0.5
-		$Origin/Mesh.translation.z = randf() * 0.5
+		$Origin/Mesh.translation.x = random.randf() - 0.5
+		$Origin/Mesh.translation.z = random.randf() * 0.5
 		
 	if destroy:
 		$Origin/Mesh.translation.y -= 8 * delta
@@ -41,7 +43,7 @@ func _process(delta):
 			if not small:
 				$DownSound.play()
 				emit_signal("shake_screen")
-				if randi() % 100 < 12:
+				if random.randi() % 100 < 12:
 					var fire = fire_scene.instance()
 					add_child(fire)
 			destroy = false
@@ -73,10 +75,10 @@ func hit(area):
 
 
 func evacuate(luck):
-	if occupants > 0 and randi() % 100 < luck:
+	if occupants > 0 and random.randi() % 100 < luck:
 		var loc = translation
-		loc.x += randf() * 4.0 - 2.0
-		loc.z += randf() * 4.0 - 2.0
+		loc.x += random.randf() * 4.0 - 2.0
+		loc.z += random.randf() * 4.0 - 2.0
 		game.spawn_human(loc, level)
 		occupants -= 1
 		evacuate(luck / 2)

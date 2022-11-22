@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -33,6 +33,8 @@
 [ext_resource path="res://addons/godot-xr-tools/functions/movement_sprint.tscn" type="PackedScene" id=31]
 [ext_resource path="res://interface/interface.tscn" type="PackedScene" id=32]
 [ext_resource path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" type="PackedScene" id=33]
+[ext_resource path="res://addons/godot-xr-tools/functions/function_pickup.tscn" type="PackedScene" id=34]
+[ext_resource path="res://addons/godot-xr-tools/functions/movement_climb.tscn" type="PackedScene" id=35]
 
 [sub_resource type="SpatialMaterial" id=9]
 flags_transparent = true
@@ -206,6 +208,18 @@ radius = 2.0
 radius = 3.0
 height = 4.0
 
+[sub_resource type="OccluderShapePolygon" id=16]
+polygon_points = PoolVector2Array( 101.453, -15.1961, 102.697, 27.5185, -100.886, 26.1181, -100.96, -14.4867 )
+
+[sub_resource type="OccluderShapePolygon" id=17]
+polygon_points = PoolVector2Array( 104.849, -17.4349, 106.982, 25.1916, -100.714, 25.7356, -100.26, -17.9369 )
+
+[sub_resource type="OccluderShapePolygon" id=18]
+polygon_points = PoolVector2Array( 105.349, -13.772, 105.838, 28.1178, -104.648, 27.523, -104.262, -13.8989 )
+
+[sub_resource type="OccluderShapePolygon" id=19]
+polygon_points = PoolVector2Array( 101.565, -15.6477, 101.454, 29.5997, -113.164, 29.9376, -113.636, -15.0656 )
+
 [node name="Monster" type="Spatial"]
 script = ExtResource( 18 )
 
@@ -264,6 +278,11 @@ strafe = true
 [node name="MovementSprint" parent="FPController/LeftHandController" index="2" instance=ExtResource( 31 )]
 sprint_type = 1
 
+[node name="FunctionPickup" parent="FPController/LeftHandController" index="3" instance=ExtResource( 34 )]
+grab_distance = 0.75
+grab_collision_mask = 32
+ranged_enable = false
+
 [node name="RightPhysicsHand" parent="FPController/RightHandController" index="0" instance=ExtResource( 15 )]
 
 [node name="MovementTurn" parent="FPController/RightHandController" index="1" instance=ExtResource( 16 )]
@@ -272,8 +291,19 @@ turn_mode = 2
 [node name="MovementJump" parent="FPController/RightHandController" index="2" instance=ExtResource( 26 )]
 jump_button_id = 7
 
+[node name="FunctionPickup" parent="FPController/RightHandController" index="3" instance=ExtResource( 34 )]
+grab_distance = 0.75
+grab_collision_mask = 32
+ranged_enable = false
+
+[node name="MovementClimb" parent="FPController" instance=ExtResource( 35 )]
+fling_multiplier = 3.0
+left_pickup = NodePath("../LeftHandController/FunctionPickup")
+right_pickup = NodePath("../RightHandController/FunctionPickup")
+
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
 physics = SubResource( 10 )
+collision_mask = 127
 
 [node name="monster" type="Spatial" parent="FPController"]
 script = ExtResource( 17 )
@@ -393,7 +423,7 @@ bones/18/name = "foot_l"
 bones/18/parent = 17
 bones/18/rest = Transform( 1, 6.39612e-08, 4.68098e-07, -6.39612e-08, -0.963343, 0.268273, 4.68098e-07, -0.268273, -0.963343, -5.05033e-08, 0, -4.76837e-08 )
 bones/18/enabled = true
-bones/18/bound_children = [  ]
+bones/18/bound_children = [ NodePath("LeftFootAnchor") ]
 bones/19/name = "knee_l"
 bones/19/parent = -1
 bones/19/rest = Transform( 1, 0, 1.50996e-07, 1.50996e-07, 0, -1, 0, 1, 0, 1.8, -4.41158, 4.97153 )
@@ -413,7 +443,7 @@ bones/22/name = "fingers_l"
 bones/22/parent = 21
 bones/22/rest = Transform( 0.300508, -0.935816, -0.184236, 0.939744, 0.257494, 0.224895, -0.163021, -0.240718, 0.956807, -2.98023e-07, 1.12912, -1.19209e-07 )
 bones/22/enabled = true
-bones/22/bound_children = [  ]
+bones/22/bound_children = [ NodePath("LeftHandAnchor") ]
 bones/23/name = "elbow_l"
 bones/23/parent = -1
 bones/23/rest = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, 2.3, 0, -10 )
@@ -428,7 +458,7 @@ bones/25/name = "foot_r"
 bones/25/parent = 24
 bones/25/rest = Transform( 1, -6.39612e-08, -4.68098e-07, 6.39612e-08, -0.963343, 0.268273, -4.68098e-07, -0.268273, -0.963343, 5.05033e-08, 0, -4.76837e-08 )
 bones/25/enabled = true
-bones/25/bound_children = [  ]
+bones/25/bound_children = [ NodePath("RightFootAnchor") ]
 bones/26/name = "knee_r"
 bones/26/parent = -1
 bones/26/rest = Transform( 1, 0, -1.50996e-07, -1.50996e-07, 0, -1, 0, 1, 0, -1.8, -4.41158, 4.97153 )
@@ -448,7 +478,7 @@ bones/29/name = "fingers_r"
 bones/29/parent = 28
 bones/29/rest = Transform( 0.300508, 0.935816, 0.184236, -0.939744, 0.257494, 0.224895, 0.163021, -0.240718, 0.956807, 2.98023e-07, 1.12912, -1.19209e-07 )
 bones/29/enabled = true
-bones/29/bound_children = [  ]
+bones/29/bound_children = [ NodePath("RightHandAnchor") ]
 bones/30/name = "elbow_r"
 bones/30/parent = -1
 bones/30/rest = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, -2.3, 0, -10 )
@@ -516,7 +546,6 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea/GrabTargetArea"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shape = SubResource( 15 )
 
 [node name="LeftFootAnchor" type="BoneAttachment" parent="FPController/monster/Armature/Skeleton"]
@@ -563,6 +592,25 @@ collision_mask = 15360
 [node name="CollisionShape" type="CollisionShape" parent="FPController/Hitbox"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 13 )
+
+[node name="OccluderHolder" type="Spatial" parent="FPController"]
+visible = false
+
+[node name="Occluder" type="Occluder" parent="FPController/OccluderHolder"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 90 )
+shape = SubResource( 16 )
+
+[node name="Occluder2" type="Occluder" parent="FPController/OccluderHolder"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -90 )
+shape = SubResource( 17 )
+
+[node name="Occluder3" type="Occluder" parent="FPController/OccluderHolder"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 90, 0, 0 )
+shape = SubResource( 18 )
+
+[node name="Occluder4" type="Occluder" parent="FPController/OccluderHolder"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -90, 0, 0 )
+shape = SubResource( 19 )
 
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.1

@@ -80,6 +80,8 @@ func _physics_process(delta):
 			torch_timer.start()
 			if collider.is_in_group("humans"):
 				collider.splat()
+			if collider.is_in_group("vehicles"):
+				collider.destroy()
 
 
 func set_state(new_state, anim = null):
@@ -179,12 +181,14 @@ func _on_left_controller_pressed(button):
 	if button == attack_button:
 		lattack_area.monitorable = true
 		lattack_area.monitoring = true
+		lsmash_area.monitorable = true
+		lsmash_area.monitoring = true
 		if HUD_interface.score_screen == true:
 			HUD_interface.get_node("RestartTimer").start()
 		
-	if button == grab_button:
-		lsmash_area.monitorable = true
-		lsmash_area.monitoring = true
+#	if button == grab_button:
+#		lsmash_area.monitorable = true
+#		lsmash_area.monitoring = true
 		
 	if button == HUD_button:
 		HUD_interface_viewport.visible = !HUD_interface_viewport.visible
@@ -217,11 +221,13 @@ func _on_left_controller_released(button):
 	if button == attack_button:
 		lattack_area.monitorable = false
 		lattack_area.monitoring = false
-	
-	if button == grab_button:
 		lsmash_area.monitorable = false
 		lsmash_area.monitoring = false
 		
+#	if button == grab_button:
+#		lsmash_area.monitorable = false
+#		lsmash_area.monitoring = false
+#
 	
 func _on_right_controller_released(button):
 			

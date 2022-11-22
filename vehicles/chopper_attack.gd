@@ -5,6 +5,7 @@ var rockets = false
 
 
 func attack():
+	randomize()
 	if not monster:
 		return
 	

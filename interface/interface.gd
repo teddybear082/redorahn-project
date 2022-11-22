@@ -29,7 +29,7 @@ func _input(event):
 		return
 	if $RestartTimer.is_stopped() and event is InputEventKey or event is InputEventJoypadButton or event is InputEventMouseButton:
 		$RestartTimer.start()
-		$BlackScreen.visible = true
+		#$BlackScreen.visible = true
 
 
 func _process(delta):

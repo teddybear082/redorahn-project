@@ -25,16 +25,17 @@ var flee_angle = 0.0
 var velocity = Vector3.ZERO
 var rotation_factor = Vector3(0.0, randf(), 0.0) * 180.0
 var chopper_angle = 0.0
-
+var random = RandomNumberGenerator.new()
 
 
 func _ready():
+	random.randomize()
 	if state == STATE_PARKED:
 		set_kill_collision(false)
 	else:
-		occupants += randi() % 4
-	$FleeTimer.wait_time += randf() * 0.75
-	$KillTimer.wait_time += randf() * 0.4
+		occupants += random.randi() % 4
+	$FleeTimer.wait_time += random.randf() * 0.75
+	$KillTimer.wait_time += random.randf() * 0.4
 	$AttackTimer.wait_time = attack_rate
 	if chopper:
 		state = STATE_CHOPPER
@@ -42,11 +43,11 @@ func _ready():
 	elif level > 0:
 		state = STATE_CHASE
 	else:
-		if randi() % 100 < 25:
+		if random.randi() % 100 < 25:
 			$Origin/Mesh.mesh = van_mesh
 		var mat = $Origin/Mesh.mesh.surface_get_material(0).duplicate()
 		var offset = 0.0
-		offset = randi() % 8
+		offset = random.randi() % 8
 		offset /= 8.0
 		mat.uv1_offset.x = offset
 		$Origin/Mesh.set_surface_material(0, mat)
@@ -195,7 +196,7 @@ func _physics_process(delta):
 			if is_on_floor() and velocity.y < 0.0:
 				if velocity.length() > 20.0:
 					velocity.y = velocity.length() * 0.5
-					if randi() % 100 < 100:
+					if random.randi() % 100 < 100:
 						game.spawn_explosion(translation, 1)
 					velocity *= 0.7
 				else:
@@ -220,14 +221,14 @@ func flee():
 		flee_angle *= Vector3(1.0, 0.0, 1.0)
 		flee_angle = flee_angle.normalized()
 		flee_angle = Vector3.FORWARD.signed_angle_to(flee_angle, Vector3.UP)
-		flee_angle += (randf() - 0.5) * 1.5
+		flee_angle += (random.randf() - 0.5) * 1.5
 
 
 func evacuate(luck, once = false):
-	if occupants > min_occupants and randi() % 100 < luck:
+	if occupants > min_occupants and random.randi() % 100 < luck:
 		var loc = translation
-		loc.x += randf() * 4.0 - 2.0
-		loc.z += randf() * 4.0 - 2.0
+		loc.x += random.randf() * 4.0 - 2.0
+		loc.z += random.randf() * 4.0 - 2.0
 		game.spawn_human(loc, level)
 		occupants -= 1
 		if not once:

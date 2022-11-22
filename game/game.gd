@@ -35,13 +35,17 @@ var kills = 0
 var threat_level = 0
 var game_over = false
 var aliens = false
+var random = RandomNumberGenerator.new()
 
 onready var monster = $Monster
 onready var monster_fp_controller = monster.get_node("FPController/ARVRCamera")
 onready var monster_body = monster.get_node("FPController")
 onready var interface = monster.get_node("FPController/ARVRCamera/InterfaceViewport").get_scene_instance()
+onready var monster_fire_raycast : RayCast = monster_fp_controller.get_node("FireRayCast")
 
 func _ready():
+	random.randomize()
+	
 	monster.connect("died", self, "monster_died")
 	
 	for n in get_tree().get_nodes_in_group("buildings"):
@@ -66,7 +70,8 @@ func _process(delta):
 func _physics_process(delta):
 	if monster_body.transform.origin.y >= 50 or monster_body.transform.origin.y <= -10:
 		monster_body.get_node("PlayerBody").velocity = Vector3.ZERO
-		monster_body.transform.origin = Vector3.ZERO	
+		monster_body.transform.origin = Vector3.ZERO
+		
 
 func score(points):
 	score += points
@@ -100,7 +105,6 @@ func monster_died():
 
 func game_over():
 	interface.show_score(score, kills)
-	#$ScoreCamera.make_current()
 	game_over = true
 
 
@@ -123,11 +127,11 @@ func get_closest_path(target, vehicles = false):
 	var array = []
 	for n in parent.get_children():
 		var point = n.curve.get_closest_point(target)
-		if point.distance_to(monster_fp_controller.translation) <= 50.0:
+		if point.distance_to(monster_fp_controller.global_transform.origin) <= 50.0:
 			array.push_back(n)
 	
 	if array.size():
-		return array[randi() % array.size()]
+		return array[random.randi() % array.size()]
 	else:
 		return null
 
@@ -136,11 +140,11 @@ func get_closest_path_in_group(group, target):
 	var array = []
 	for n in get_tree().get_nodes_in_group(group):
 		var point = n.curve.get_closest_point(target)
-		if point.distance_to(monster_fp_controller.translation) <= 50.0:
+		if point.distance_to(monster_fp_controller.global_transform.origin) <= 50.0:
 			array.push_back(n)
 	
 	if array.size():
-		return array[randi() % array.size()]
+		return array[random.randi() % array.size()]
 	else:
 		return null
 
@@ -179,38 +183,38 @@ func generate_vehicle():
 	if $AlienTimer.is_stopped():
 		aliens_luck = 4
 		
-	if aliens and randi() % 100 < aliens_luck:
+	if aliens and random.randi() % 100 < aliens_luck:
 		military = true
 		scene = ufo_scene
 	elif randi() % 100 < chopper_luck:
-		if threat_level >= 5 or (threat_level >= 3 and randi() % 100 < 50):
+		if threat_level >= 5 or (threat_level >= 3 and random.randi() % 100 < 50):
 			military = true
 			scene = attack_chopper_scene
 		else:
 			scene = chopper_scene
-	elif randi() % 100 < military_luck:
+	elif random.randi() % 100 < military_luck:
 		military = true
-		if threat_level >= 4 and randi() % 100 >= 60:
-			if randi() % 100 < 36:
+		if threat_level >= 4 and random.randi() % 100 >= 60:
+			if random.randi() % 100 < 36:
 				scene = mrl_scene
 			else:
 				scene = tank_scene
 		else:
 			scene = apc_scene
-	elif threat_level >= 5 and randi() % 100 < 90:
+	elif threat_level >= 5 and random.randi() % 100 < 90:
 		return
-	elif randi() % 100 < cop_luck:
+	elif random.randi() % 100 < cop_luck:
 		scene = cop_car_scene
 	else:
 		scene = car_scene
 	
 	var path = null
 	#var parent = get_closest_path($Monster.translation, true)
-	var parent = get_closest_path_in_group("vehicle_paths", monster_fp_controller.translation)
+	var parent = get_closest_path_in_group("vehicle_paths", monster_fp_controller.global_transform.origin)
 	if parent:
 		path = PathFollow.new()
 		parent.add_child(path)
-		path.offset = randi()
+		path.offset = random.randi()
 	elif not military:
 		return
 	
@@ -223,10 +227,10 @@ func generate_vehicle():
 		vehicle.path = path
 		vehicle.translation = path.translation
 	else:
-		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
+		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.global_transform.origin).normalized()
 		loc *= 125.0
-		loc = loc.rotated(Vector3.UP, randf() - 0.5)
-		loc += monster_fp_controller.translation
+		loc = loc.rotated(Vector3.UP, random.randf() - 0.5)
+		loc += monster_fp_controller.global_transform.origin
 		vehicle.translation = loc
 	
 	vehicle.translation.y = 1.0
@@ -245,22 +249,22 @@ func generate_human():
 	if $AlienTimer.is_stopped():
 		aliens_luck = 2
 		
-	if aliens and randi() % 100 < aliens_luck:
+	if aliens and random.randi() % 100 < aliens_luck:
 		level = 3
 	elif threat_level == 5:
-		if randi() % 100 < 25:
+		if random.randi() % 100 < 25:
 			level = 2
 		else:
 			return
-	elif randi() % 100 < 3:
+	elif random.randi() % 100 < 3:
 		level = 1
 	
 	var path = null
-	var parent = get_closest_path_in_group("human_paths", monster_fp_controller.translation)
+	var parent = get_closest_path_in_group("human_paths", monster_fp_controller.global_transform.origin)
 	if parent:
 		path = PathFollow.new()
 		parent.add_child(path)
-		path.offset = randi()
+		path.offset = random.randi()
 	elif level < 2:
 		return
 	
@@ -270,12 +274,12 @@ func generate_human():
 	human.monster_fp_controller = monster_fp_controller
 	if path:
 		human.path = path
-		human.translation = path.translation + Vector3(randf() * 2.0 - 1.0, randf() * 2.0 - 1.0, randf() * 2.0 - 1.0)
+		human.translation = path.translation + Vector3(random.randf() * 2.0 - 1.0, random.randf() * 2.0 - 1.0, random.randf() * 2.0 - 1.0)
 	else:
-		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.translation).normalized()
+		var loc = ($MilitarySpawnPoint.translation - monster_fp_controller.global_transform.origin).normalized()
 		loc *= 50.0
-		loc = loc.rotated(Vector3.UP, randf() - 0.5)
-		loc += monster_fp_controller.translation
+		loc = loc.rotated(Vector3.UP, random.randf() - 0.5)
+		loc += monster_fp_controller.global_transform.origin
 		human.translation = loc
 		
 	human.translation.y = 1.0

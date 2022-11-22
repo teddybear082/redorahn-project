@@ -63,8 +63,8 @@ X: HUD Toggle
 B: Roar
 A: Jump
 Triggers: Hit
-L Grip: Smash Ground
-R Grip: Grab / Throw
+L Grip: Climb
+R Grip: Grab / Throw / Climb
 Click L Stick: Sprint Toggle"
 
 [node name="ScoreScreen" type="Control" parent="."]
@@ -153,7 +153,7 @@ wait_time = 0.25
 wait_time = 0.1
 
 [node name="RestartTimer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 1.5
 one_shot = true
 
 [connection signal="timeout" from="HealthTimer" to="." method="switch_health_bar"]

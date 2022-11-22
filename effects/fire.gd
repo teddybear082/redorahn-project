@@ -1,8 +1,10 @@
 extends CPUParticles
 
+var random = RandomNumberGenerator.new()
 
 func _ready():
-	lifetime = 2.5 + randf()
+	random.randomize()
+	lifetime = 2.5 + random.randf()
 
 
 func _on_FireTimer_timeout():

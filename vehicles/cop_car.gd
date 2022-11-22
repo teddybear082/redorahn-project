@@ -1,13 +1,13 @@
 extends "res://vehicles/vehicle.gd"
 
 var siren = false
-
 onready var red_light = $Origin/RedLight
 onready var blue_light = $Origin/BlueLight
 
 
 func _ready():
-	if randi() % 100 < 100:
+	random.randomize()
+	if random.randi() % 100 < 100:
 		siren = true
 	stop_siren()
 

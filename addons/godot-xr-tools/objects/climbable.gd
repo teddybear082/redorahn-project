@@ -1,5 +1,5 @@
 class_name XRToolsClimbable, "res://addons/godot-xr-tools/editor/icons/hand.svg"
-extends Spatial
+extends StaticBody
 
 ##
 ## Climbable Object
