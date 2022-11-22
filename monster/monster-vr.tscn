@@ -658,7 +658,7 @@ one_shot = true
 
 [connection signal="body_entered" from="FPController/ARVRCamera/EatingArea" to="." method="_on_EatingArea_body_entered"]
 [connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]
-[connection signal="finished" from="RoarSound" to="." method="_on_RoarSound_finished"]
+[connection signal="finished" from="DieSound" to="." method="_on_DieSound_finished"]
 [connection signal="timeout" from="TorchTimer" to="." method="_on_TorchTimer_timeout"]
 [connection signal="timeout" from="ThowTimer" to="." method="_on_ThowTimer_timeout"]
 

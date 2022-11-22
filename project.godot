@@ -341,7 +341,6 @@ XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd
 
 window/size/width=1920
 window/size/height=1080
-window/size/fullscreen=true
 window/size/test_width=800
 window/size/test_height=600
 window/vsync/use_vsync=false

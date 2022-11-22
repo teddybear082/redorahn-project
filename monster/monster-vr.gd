@@ -274,5 +274,5 @@ func _on_ThowTimer_timeout():
 	able_to_throw = true
 	
 
-func _on_RoarSound_finished():
+func _on_DieSound_finished():
 	roar = false
