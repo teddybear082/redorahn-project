@@ -657,6 +657,8 @@ wait_time = 0.2
 one_shot = true
 
 [connection signal="body_entered" from="FPController/ARVRCamera/EatingArea" to="." method="_on_EatingArea_body_entered"]
+[connection signal="has_picked_up" from="FPController/LeftHandController/FunctionPickup" to="." method="_on_LeftFunctionPickup_has_picked_up"]
+[connection signal="has_picked_up" from="FPController/RightHandController/FunctionPickup" to="." method="_on_RightFunctionPickup_has_picked_up"]
 [connection signal="area_entered" from="FPController/Hitbox" to="." method="hit"]
 [connection signal="finished" from="DieSound" to="." method="_on_DieSound_finished"]
 [connection signal="timeout" from="TorchTimer" to="." method="_on_TorchTimer_timeout"]

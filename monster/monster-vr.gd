@@ -276,3 +276,12 @@ func _on_ThowTimer_timeout():
 
 func _on_DieSound_finished():
 	roar = false
+
+
+
+func _on_LeftFunctionPickup_has_picked_up(what):
+	rumble_needed("left")
+
+
+func _on_RightFunctionPickup_has_picked_up(what):
+	rumble_needed("right")
