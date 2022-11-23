@@ -20,6 +20,8 @@ Report any issues in "Issues" and I will try my best but I think this works pret
 
 See the license files for specific licenses applicable to each part of the project.
 
+Known issues:
+If you climb a building and knock it down, but keep your grip button that you were holding the building with gripped anyway, you'll be suspended in air until you release the grip button.
 
 ![VirtualDesktop Android-20221123-065312](https://user-images.githubusercontent.com/87204721/203545662-558540cc-5ead-4046-9ece-6a8f549e711c.jpg)
 
