@@ -298,12 +298,12 @@ grab_collision_mask = 32
 ranged_enable = false
 
 [node name="MovementClimb" parent="FPController" instance=ExtResource( 35 )]
-fling_multiplier = 2.0
+fling_multiplier = 3.0
 left_pickup = NodePath("../LeftHandController/FunctionPickup")
 right_pickup = NodePath("../RightHandController/FunctionPickup")
 
 [node name="MovementGlide" parent="FPController" instance=ExtResource( 36 )]
-glide_forward_speed = 5.0
+glide_forward_speed = 3.0
 
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
 physics = SubResource( 10 )

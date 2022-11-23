@@ -64,8 +64,7 @@ B: Roar
 A: Jump
 Hold triggers while swinging to hit 
 L trigger: Power hit/ground hit
-L Grip: Grab / Throw / Climb
-R Grip: Grab / Throw / Climb
+Grips: Grab / Throw / Climb
 Click L Stick: Sprint Toggle"
 
 [node name="ScoreScreen" type="Control" parent="."]
