@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://addons/godot-openxr/scenes/first_person_controller_vr.tscn" type="PackedScene" id=1]
 [ext_resource path="res://monster/mesh/throw.anim" type="Animation" id=2]
@@ -35,6 +35,7 @@
 [ext_resource path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" type="PackedScene" id=33]
 [ext_resource path="res://addons/godot-xr-tools/functions/function_pickup.tscn" type="PackedScene" id=34]
 [ext_resource path="res://addons/godot-xr-tools/functions/movement_climb.tscn" type="PackedScene" id=35]
+[ext_resource path="res://addons/godot-xr-tools/functions/movement_glide.tscn" type="PackedScene" id=36]
 
 [sub_resource type="SpatialMaterial" id=9]
 flags_transparent = true
@@ -297,9 +298,12 @@ grab_collision_mask = 32
 ranged_enable = false
 
 [node name="MovementClimb" parent="FPController" instance=ExtResource( 35 )]
-fling_multiplier = 3.0
+fling_multiplier = 2.0
 left_pickup = NodePath("../LeftHandController/FunctionPickup")
 right_pickup = NodePath("../RightHandController/FunctionPickup")
+
+[node name="MovementGlide" parent="FPController" instance=ExtResource( 36 )]
+glide_forward_speed = 5.0
 
 [node name="PlayerBody" parent="FPController" instance=ExtResource( 25 )]
 physics = SubResource( 10 )
@@ -494,7 +498,6 @@ transform = Transform( 0.615399, -0.78501, 0.0710124, -0.00978236, -0.0976926, -
 bone_name = "fingers_l"
 
 [node name="LAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor"]
-visible = false
 collision_layer = 2
 collision_mask = 0
 monitoring = false
@@ -514,12 +517,31 @@ monitorable = false
 transform = Transform( 1, -9.31323e-10, -1.49012e-08, -1.86265e-09, 1, -1.30385e-08, -1.49012e-08, 9.48785e-09, 1, 1.99354, 0.0234688, 0.15885 )
 shape = SubResource( 12 )
 
+[node name="GrabArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor"]
+transform = Transform( 1, 8.9407e-08, 3.72529e-09, -2.98023e-08, 1, -1.04308e-07, -5.96046e-08, -3.72529e-08, 1, -0.164202, 1.27071, -0.361749 )
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/GrabArea"]
+shape = SubResource( 6 )
+
+[node name="GrabTargetArea" type="Area" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/GrabArea"]
+transform = Transform( 0.756904, -0.541839, 0.365389, 0.370646, -0.104573, -0.922869, 0.538256, 0.833952, 0.12168, -1.94517, 3.24586, -0.273535 )
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="FPController/monster/Armature/Skeleton/LeftHandAnchor/GrabArea/GrabTargetArea"]
+shape = SubResource( 15 )
+
 [node name="RightHandAnchor" type="BoneAttachment" parent="FPController/monster/Armature/Skeleton"]
 transform = Transform( 0.615399, 0.78501, -0.0710124, 0.00978236, -0.0976926, -0.995169, -0.788155, 0.611731, -0.0678007, -3.34279, -0.99149, 1.59694 )
 bone_name = "fingers_r"
 
 [node name="RAttackArea" type="Area" parent="FPController/monster/Armature/Skeleton/RightHandAnchor"]
-visible = false
 collision_layer = 2
 collision_mask = 0
 monitoring = false

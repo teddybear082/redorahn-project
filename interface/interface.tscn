@@ -62,8 +62,9 @@ Y: Fire Breath
 X: HUD Toggle
 B: Roar
 A: Jump
-Triggers: Hit
-L Grip: Climb
+Hold triggers while swinging to hit 
+L trigger: Power hit/ground hit
+L Grip: Grab / Throw / Climb
 R Grip: Grab / Throw / Climb
 Click L Stick: Sprint Toggle"
 

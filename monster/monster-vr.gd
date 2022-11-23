@@ -4,7 +4,6 @@ enum {STATE_IDLE, STATE_ATTACK_LEFT, STATE_ATTACK_RIGHT,
   STATE_ATTACK_SMASH, STATE_GRAB, STATE_ROAR, STATE_EAT, STATE_THROW, STATE_DEAD}
 
 signal died
-signal rumble_needed(side_string)
 
 export var locked = false
 export var roar = false
@@ -19,13 +18,16 @@ var health = max_health
 var speed = 20.0
 var camera_distance = 20.0
 var state = STATE_IDLE
-var grabbed_object = null
+var l_grabbed_object = null
+var r_grabbed_object = null
 var fire = preload("res://effects/fire.tscn")
 var able_to_torch: bool = true
 var able_to_throw : bool = true
 
-onready var grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
-onready var grab_target : Area = grab_area.get_node("GrabTargetArea")
+onready var r_grab_area = $FPController/monster/Armature/Skeleton/RightHandAnchor/GrabArea
+onready var r_grab_target : Area = r_grab_area.get_node("GrabTargetArea")
+onready var l_grab_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/GrabArea
+onready var l_grab_target : Area = l_grab_area.get_node("GrabTargetArea")
 onready var lstomp_area = $FPController/monster/Armature/Skeleton/LeftFootAnchor/LStompArea
 onready var rstomp_area = $FPController/monster/Armature/Skeleton/RightFootAnchor/RStompArea
 onready var lattack_area = $FPController/monster/Armature/Skeleton/LeftHandAnchor/LAttackArea
@@ -95,12 +97,20 @@ func set_state(new_state, anim = null):
 	rstomp_area.monitorable = false
 
 
-func grab(object):
-	if grabbed_object:
-		return false
+func grab(object, area):
+	if area == l_grab_target:
+		if l_grabbed_object:
+			return false
+	
+	if area == r_grab_target:
+		if r_grabbed_object:
+			return false
 	
 	object.get_parent().call_deferred("remove_child", object)
-	grab_area.call_deferred("add_child", object)
+	if area == l_grab_target:
+		l_grab_area.call_deferred("add_child", object)
+	if area == r_grab_target:
+		r_grab_area.call_deferred("add_child", object)
 	object.translation = Vector3.ZERO
 	if object.is_in_group("humans"):
 		object.state = object.STATE_GRABBED
@@ -114,31 +124,54 @@ func grab(object):
 		object.get_node("AttackTimer").stop()
 		object.get_node("DropTimer").stop()
 		object.get_node("Hitbox").set_deferred("monitoring", false)
-	grabbed_object = object
+	if area == l_grab_target:
+		l_grabbed_object = object
+	if area == r_grab_target:
+		r_grabbed_object = object
 	able_to_throw = false
 	throw_timer.start()
-	rumble_needed("right")
+	if area == l_grab_target:
+		rumble_needed("left")
+	if area == r_grab_target:
+		rumble_needed("right")
 	return true
 
 
-func throw():
-	if grabbed_object:
-		var vel = (throw_target.global_transform.origin - grab_area.global_transform.origin).normalized() * 75.0
+func left_throw():
+	if l_grabbed_object:
+		var vel = (throw_target.global_transform.origin - l_grab_area.global_transform.origin).normalized() * 75.0
 		vel.y = 100.0
-		grabbed_object.throw(grab_area.global_transform.origin, vel)
-		grabbed_object = null
+		l_grabbed_object.throw(l_grab_area.global_transform.origin, vel)
+		l_grabbed_object = null
 
+func right_throw():
+	if r_grabbed_object:
+		var vel = (throw_target.global_transform.origin - r_grab_area.global_transform.origin).normalized() * 75.0
+		vel.y = 100.0
+		r_grabbed_object.throw(r_grab_area.global_transform.origin, vel)
+		r_grabbed_object = null
 
-func eat():
-	if grabbed_object:
-		if grabbed_object.alien:
+func left_eat():
+	if l_grabbed_object:
+		if l_grabbed_object.alien:
 			health += 100
 		else:
 			health += 30
-		grabbed_object.eat()
-		grabbed_object = null
+		l_grabbed_object.eat()
+		l_grabbed_object = null
 		health = min(health, max_health)
+		rumble_needed("left")
 
+func right_eat():
+	if r_grabbed_object:
+		if r_grabbed_object.alien:
+			health += 100
+		else:
+			health += 30
+		r_grabbed_object.eat()
+		r_grabbed_object = null
+		health = min(health, max_health)
+		rumble_needed("right")
 
 func shake():
 	$ShakeTimer.start()
@@ -186,9 +219,9 @@ func _on_left_controller_pressed(button):
 		if HUD_interface.score_screen == true:
 			HUD_interface.get_node("RestartTimer").start()
 		
-#	if button == grab_button:
-#		lsmash_area.monitorable = true
-#		lsmash_area.monitoring = true
+	if button == grab_button:
+		l_grab_target.monitoring = true
+		l_grab_target.monitorable = true
 		
 	if button == HUD_button:
 		HUD_interface_viewport.visible = !HUD_interface_viewport.visible
@@ -206,8 +239,8 @@ func _on_right_controller_pressed(button):
 			HUD_interface.get_node("RestartTimer").start()
 		
 	if button == grab_button:
-		grab_target.monitoring = true
-		grab_target.monitorable = true
+		r_grab_target.monitoring = true
+		r_grab_target.monitorable = true
 			
 			
 func _on_left_controller_released(button):
@@ -224,10 +257,11 @@ func _on_left_controller_released(button):
 		lsmash_area.monitorable = false
 		lsmash_area.monitoring = false
 		
-#	if button == grab_button:
-#		lsmash_area.monitorable = false
-#		lsmash_area.monitoring = false
-#
+	if button == grab_button:
+		l_grab_target.monitoring = false
+		l_grab_target.monitorable = false
+		if l_grabbed_object and able_to_throw:
+			left_throw()
 	
 func _on_right_controller_released(button):
 			
@@ -236,10 +270,10 @@ func _on_right_controller_released(button):
 		rattack_area.monitoring = false
 		
 	if button == grab_button:
-		grab_target.monitorable = false
-		grab_target.monitoring = false
-		if grabbed_object and able_to_throw:
-			throw()
+		r_grab_target.monitorable = false
+		r_grab_target.monitoring = false
+		if r_grabbed_object and able_to_throw:
+			right_throw()
 
 func rumble_needed(side: String):
 	if side == "left":
@@ -259,10 +293,16 @@ func _play_step_sound():
 
 func _on_EatingArea_body_entered(body):
 	if body.is_in_group("humans"):
-		eat()
-		eat_sound.play()
-		rumble_needed("right")
-		grabbed_object=null
+		if body.get_parent().get_parent().name.matchn("*left*"):
+			left_eat()
+			eat_sound.play()
+			rumble_needed("left")
+			l_grabbed_object=null
+		else:
+			right_eat()
+			eat_sound.play()
+			rumble_needed("right")
+			r_grabbed_object=null
 		
 
 

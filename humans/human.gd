@@ -202,7 +202,7 @@ func fire_rocket():
 
 func hit(area):
 	if area.get_collision_layer_bit(3) and monster:
-		if monster.grab(self):
+		if monster.grab(self, area):
 			state = STATE_GRABBED
 			$Origin.rotation = Vector3.ZERO
 			$Hitbox.set_deferred("monitoring", false)
