@@ -320,16 +320,11 @@ func _ready():
 	
 	#Set skeleton targets to the automatically generated target nodes
 	if left_controller_path != null:
-		SkeletonIKL.set_target_node(NodePath("../../../../" + left_controller.name + "/" + left_hand.name + "/left_target"))
-	else:
-		print("Left controller path not found, assuming just using hand node.")
-		SkeletonIKL.set_target_node(NodePath("../../../../" + left_hand.name + "/left_target"))
+		SkeletonIKL.set_target_node(left_hand_target.get_path())
 	
 	if right_controller_path != null:
-		SkeletonIKR.set_target_node(NodePath("../../../../" + right_controller.name + "/" + right_hand.name + "/right_target"))
-	else:
-		print("Right controller path not found, assuming just using hand node.")
-		SkeletonIKR.set_target_node(NodePath("../../../../" + right_hand.name + "/right_target"))
+		SkeletonIKR.set_target_node(right_hand_target.get_path())
+
 	
 	SkeletonIKLegL.set_target_node(NodePath("../../../LL_c/LL_t"))
 	SkeletonIKLegR.set_target_node(NodePath("../../../RL_c/Rl_t"))
